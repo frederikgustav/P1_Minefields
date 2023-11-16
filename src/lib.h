@@ -8,5 +8,5 @@ struct minefield {
     int width;
     int height;
     struct square** matrix;
-    double square_area;
+    double metric_square_length;
 };
