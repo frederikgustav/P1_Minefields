@@ -40,11 +40,25 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
         field.matrix[random_y][random_x].cost = MINE_COST;
     }
 
+    print_minefield(field.matrix);
+
     return field;
 }
 
 void print_minefield(struct square** field) {
-    // elma print et minefelt
-    return; // remove
+  for (int i = 0; i < 5; ++i) {
+
+    printf("| ");
+
+    for (int j = 0; j < 5; ++j) {
+      if (field[i][j].cost == 0) {
+        printf("O ");
+      } else {
+        printf("X ");
+      }
+    }
+
+    printf("| \n");
+  }
 }
 
