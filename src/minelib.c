@@ -1,6 +1,7 @@
 #include "minelib.h"
 #include <malloc.h>
 #include <stdio.h>
+#include <time.h>
 
 #define MINE_COST 300
 
@@ -23,8 +24,23 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
 }
 
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount) {
-    // return randomized minefield
-    printf("");
+    struct minefield field = get_empty_minefield(width, height, metric_square_length);
+    srand(time(NULL));
+
+    // For-loop generating random mines
+    for (int i = 0; i < mine_amount; ++i) {
+        int random_y = rand() % height;
+        int random_x = rand() % width;
+
+        if (field.matrix[random_y][random_x].cost != 0) {
+            i--;
+            continue;
+        }
+
+        field.matrix[random_y][random_x].cost = MINE_COST;
+    }
+
+    return field;
 }
 
 void print_minefield(struct square** field) {
