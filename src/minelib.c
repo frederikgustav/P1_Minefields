@@ -47,3 +47,4 @@ void print_minefield(struct square** field) {
     // elma print et minefelt
     return; // remove
 }
+
