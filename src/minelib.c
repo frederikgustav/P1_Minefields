@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define MINE_COST 300
-
 struct minefield get_empty_minefield(int width, int height, double metric_square_length) {
     struct minefield field;
 
@@ -16,7 +14,7 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
     for (int i = 0; i < height; ++i) {
         field.matrix[i] = malloc(sizeof(struct square*)*width);
         for (int j = 0; j < width; ++j) {
-            field.matrix[i][j].cost = 0;
+            field.matrix[i][j].mine = 0;
         }
     }
 
@@ -32,26 +30,23 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
         int random_y = rand() % height;
         int random_x = rand() % width;
 
-        if (field.matrix[random_y][random_x].cost != 0) {
+        if (field.matrix[random_y][random_x].mine) {
             i--;
             continue;
         }
 
-        field.matrix[random_y][random_x].cost = MINE_COST;
+        field.matrix[random_y][random_x].mine = 1;
     }
-
-    print_minefield(field);
 
     return field;
 }
 
 void print_minefield(struct minefield field) {
   for (int i = 0; i < field.height; ++i) {
-
     printf("| ");
 
     for (int j = 0; j < field.width; ++j) {
-      if (field.matrix[i][j].cost == 0) {
+      if (field.matrix[i][j].mine == 0) {
         printf("O ");
       } else {
         printf("X ");
@@ -61,4 +56,3 @@ void print_minefield(struct minefield field) {
     printf("| \n");
   }
 }
-
