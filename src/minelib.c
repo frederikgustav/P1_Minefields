@@ -4,15 +4,19 @@
 #include <time.h>
 
 struct minefield get_empty_minefield(int width, int height, double metric_square_length) {
+    /*
+     * Takes a width, height and metric_square_length, referring to the metric length of
+     * a square, and returns an empty minefield.
+     */
     struct minefield field;
 
     field.height = height;
     field.width = width;
     field.metric_square_length = metric_square_length;
-    field.matrix = malloc(sizeof(struct square**)*height);
+    field.matrix = malloc(sizeof(struct square **) * height);
 
     for (int i = 0; i < height; ++i) {
-        field.matrix[i] = malloc(sizeof(struct square*)*width);
+        field.matrix[i] = malloc(sizeof(struct square *) * width);
         for (int j = 0; j < width; ++j) {
             field.matrix[i][j].mine = 0;
         }
@@ -22,6 +26,10 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
 }
 
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount) {
+    /*
+     * Takes a width, height, mine_amount and metric_square_length, referring to the metric length of
+     * a square, and returns a minefield with randomly placed mines.
+     */
     struct minefield field = get_empty_minefield(width, height, metric_square_length);
     srand(time(NULL));
 
@@ -42,17 +50,34 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
 }
 
 void print_minefield(struct minefield field) {
-  for (int i = 0; i < field.height; ++i) {
-    printf("| ");
+    /*
+     * Prints a minefield, example:
+     * | O O X |
+     * | X O 0 |
+     * | O O X |
+     */
+    for (int i = 0; i < field.height; ++i) {
+        printf("| ");
 
-    for (int j = 0; j < field.width; ++j) {
-      if (field.matrix[i][j].mine == 0) {
-        printf("O ");
-      } else {
-        printf("X ");
-      }
+        for (int j = 0; j < field.width; ++j) {
+            if (field.matrix[i][j].mine == 0) {
+                printf("O  ");
+            } else {
+                printf("X  ");
+            }
+        }
+
+        printf("| \n");
     }
+}
 
-    printf("| \n");
-  }
+void free_minefield(struct minefield* field) {
+    /*
+     * Takes a minefield, and deallocates the memory.
+     */
+
+    for (int i = 0; i < field->height; ++i) {
+        free(field->matrix[i]);
+    }
+    free(field->matrix);
 }
