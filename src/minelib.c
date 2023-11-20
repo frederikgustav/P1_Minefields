@@ -1,5 +1,5 @@
 #include "minelib.h"
-#include <malloc.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -40,18 +40,18 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
         field.matrix[random_y][random_x].cost = MINE_COST;
     }
 
-    print_minefield(field.matrix);
+    print_minefield(field);
 
     return field;
 }
 
-void print_minefield(struct square** field) {
-  for (int i = 0; i < 5; ++i) {
+void print_minefield(struct minefield field) {
+  for (int i = 0; i < field.height; ++i) {
 
     printf("| ");
 
-    for (int j = 0; j < 5; ++j) {
-      if (field[i][j].cost == 0) {
+    for (int j = 0; j < field.width; ++j) {
+      if (field.matrix[i][j].cost == 0) {
         printf("O ");
       } else {
         printf("X ");
