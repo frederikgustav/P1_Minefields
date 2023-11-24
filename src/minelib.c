@@ -61,7 +61,7 @@ void print_minefield(struct minefield field) {
 
         for (int j = 0; j < field.width; ++j) {
             if (field.matrix[i][j].mine == 0) {
-                printf("O  ");
+                printf("0  ");
             } else {
                 printf("X  ");
             }
@@ -71,13 +71,13 @@ void print_minefield(struct minefield field) {
     }
 }
 
-void free_minefield(struct minefield* field) {
+void free_minefield(struct minefield field) {
     /*
      * Takes a minefield, and deallocates the memory.
      */
 
-    for (int i = 0; i < field->height; ++i) {
-        free(field->matrix[i]);
+    for (int i = 0; i < field.height; ++i) {
+        free(field.matrix[i]);
     }
-    free(field->matrix);
+    free(field.matrix);
 }

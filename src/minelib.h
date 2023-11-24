@@ -1,4 +1,12 @@
 /*
+ * Represents a point in a known minefield.
+ */
+struct point {
+    int x;
+    int y;
+};
+
+/*
  * Represents a single square in minefield.
  */
 struct square {
@@ -16,18 +24,20 @@ struct minefield {
 };
 
 /*
- * Represents a cleared area of a minefield, also contains the leftover mine capacity.
+ * Represents a cleared area of a minefield, also contains the leftover mine removal capacity.
  */
 struct cleared_area {
     int remaining_mine_capacity;
-    int start_x;
-    int start_y;
-    int end_x;
-    int end_y;
+    struct point start_point;
+    struct point end_point;
 };
 
-void print_minefield(struct minefield field);
 struct minefield get_empty_minefield(int width, int height, double metric_square_length);
-struct cleared_area clear_area(struct minefield field, int mine_removal_capacity);
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount);
-void free_minefield(struct minefield* field);
+struct minefield get_sub_minefield(struct minefield field, struct point start_point, struct point end_point); // needs implementing
+
+int get_minefield_sum(struct minefield); // needs implementing
+
+
+void print_minefield(struct minefield field);
+void free_minefield(struct minefield field);
