@@ -24,20 +24,27 @@ struct minefield {
 };
 
 /*
- * Represents a cleared area of a minefield, also contains the leftover mine removal capacity.
+ * Represents a sub minefield
  */
-struct cleared_area {
-    int remaining_mine_capacity;
+struct sub_minefield {
     struct point start_point;
     struct point end_point;
 };
 
+/*
+ * Represents a cleared area of a minefield, also contains the leftover mine removal capacity.
+ */
+struct cleared_area {
+    int remaining_mine_capacity;
+    struct sub_minefield field;
+};
+
 struct minefield get_empty_minefield(int width, int height, double metric_square_length);
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount);
-struct minefield get_sub_minefield(struct minefield field, struct point start_point, struct point end_point); // needs implementing
+struct minefield get_sub_minefield_copy(struct minefield field, struct point start_point, struct point end_point); // needs implementing
+struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field);
 
 int get_minefield_sum(struct minefield); // needs implementing
-
 
 void print_minefield(struct minefield field);
 void free_minefield(struct minefield field);
