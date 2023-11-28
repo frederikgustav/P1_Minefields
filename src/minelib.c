@@ -81,3 +81,45 @@ void free_minefield(struct minefield field) {
     }
     free(field.matrix);
 }
+
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+
+struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
+    int max_size =0;
+    int max_i = 0, max_j = 0;
+    int dp[field.height][field.width];
+
+    for (int i = 0; i < field.height; ++i) {
+        for (int j =0; j < field.width; ++j) {
+            dp[i][j] = (field.matrix[i][j].mine == 0) ? 1 : 0;
+            if (dp[i][j] >max_size) {
+                max_size =dp[i][j];
+                max_i;
+                max_j;
+            }
+        }
+    }
+
+    for (int i = 1; i < field.height; ++i) {
+        for (int j = 1; j < field.width; ++j) {
+            if (field.matrix[i][j].mine == 0) {
+                dp[i][j] = 1 + min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]);
+                if (dp[i][j] > max_size) {
+                    max_size = dp[i][j];
+                    max_i = i;
+                    max_j = j;
+                }
+            }
+        }
+    }
+
+    struct sub_minefield biggest_square;
+    biggest_square.start_point.x = max_j - max_size + 1;
+    biggest_square.start_point.y = max_i - max_size + 1;
+    biggest_square.end_point.x = max_j;
+    biggest_square.end_point.y = max_i;
+
+    return biggest_square;
+}
