@@ -15,10 +15,10 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
     field.metric_square_length = metric_square_length;
     field.matrix = malloc(sizeof(struct square *) * height);
 
-    for (int i = 0; i < height; ++i) {
-        field.matrix[i] = malloc(sizeof(struct square) * width);
-        for (int j = 0; j < width; ++j) {
-            field.matrix[i][j].mine = 0;
+    for (int y = 0; y < height; ++y) {
+        field.matrix[y] = malloc(sizeof(struct square) * width);
+        for (int x = 0; x < width; ++x) {
+            field.matrix[y][x].mine = 0;
         }
     }
 
@@ -56,11 +56,11 @@ void print_minefield(struct minefield field) {
      * | X O 0 |
      * | O O X |
      */
-    for (int i = 0; i < field.height; ++i) {
+    for (int y = 0; y < field.height; ++y) {
         printf("| ");
 
-        for (int j = 0; j < field.width; ++j) {
-            if (field.matrix[i][j].mine == 0) {
+        for (int x = 0; x < field.width; ++x) {
+            if (field.matrix[y][x].mine == 0) {
                 printf("0  ");
             } else {
                 printf("X  ");
@@ -75,8 +75,8 @@ void free_minefield(struct minefield field) {
     /*
      * Takes a minefield, and deallocates the memory.
      */
-    for (int i = 0; i < field.height; ++i) {
-        free(field.matrix[i]);
+    for (int y = 0; y < field.height; ++y) {
+        free(field.matrix[y]);
     }
     free(field.matrix);
 }
@@ -87,38 +87,39 @@ int min(int a, int b) {
 
 struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
     int max_size = 0;
-    int max_i = 0, max_j = 0;
+    int max_y = 0, max_x = 0;
     int dp[field.height][field.width];
 
-    for (int i = 0; i < field.height; ++i) {
-        for (int j =0; j < field.width; ++j) {
-            dp[i][j] = (field.matrix[i][j].mine == 0) ? 1 : 0;
-            if (dp[i][j] >max_size) {
-                max_size =dp[i][j];
-                max_i;
-                max_j;
+    for (int y = 0; y < field.height; ++y) {
+        for (int x = 0; x < field.width; ++x) {
+            dp[y][x] = (field.matrix[y][x].mine == 0) ? 1 : 0;
+            if (dp[y][x] >max_size) {
+                max_size =dp[y][x];
+                max_y = y;
+                max_x = x;
             }
         }
     }
 
-    for (int i = 1; i < field.height; ++i) {
-        for (int j = 1; j < field.width; ++j) {
-            if (field.matrix[i][j].mine == 0) {
-                dp[i][j] = 1 + min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]);
-                if (dp[i][j] > max_size) {
-                    max_size = dp[i][j];
-                    max_i = i;
-                    max_j = j;
+    for (int y = 1; y < field.height; ++y) {
+        for (int x = 1; x < field.width; ++x) {
+            if (field.matrix[y][x].mine == 0) {
+                dp[y][x] = 1 + min(min(dp[y - 1][x - 1], dp[y - 1][x]), dp[y][x - 1]);
+                if (dp[y][x] > max_size) {
+                    max_size = dp[y][x];
+                    max_y = y;
+                    max_x = x;
                 }
             }
         }
     }
 
     struct sub_minefield biggest_square;
-    biggest_square.start_point.x = max_j - max_size + 1;
-    biggest_square.start_point.y = max_i - max_size + 1;
-    biggest_square.end_point.x = max_j;
-    biggest_square.end_point.y = max_i;
+    biggest_square.start_point.x = max_x - max_size + 1;
+    biggest_square.start_point.y = max_y - max_size + 1;
+    biggest_square.end_point.x = max_x;
+    biggest_square.end_point.y = max_y;
 
     return biggest_square;
 }
+
