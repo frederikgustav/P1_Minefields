@@ -13,10 +13,10 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
     field.height = height;
     field.width = width;
     field.metric_square_length = metric_square_length;
-    field.matrix = malloc(sizeof(struct square **) * height);
+    field.matrix = malloc(sizeof(struct square *) * height);
 
     for (int i = 0; i < height; ++i) {
-        field.matrix[i] = malloc(sizeof(struct square *) * width);
+        field.matrix[i] = malloc(sizeof(struct square) * width);
         for (int j = 0; j < width; ++j) {
             field.matrix[i][j].mine = 0;
         }
@@ -75,7 +75,6 @@ void free_minefield(struct minefield field) {
     /*
      * Takes a minefield, and deallocates the memory.
      */
-
     for (int i = 0; i < field.height; ++i) {
         free(field.matrix[i]);
     }
@@ -87,7 +86,7 @@ int min(int a, int b) {
 }
 
 struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
-    int max_size =0;
+    int max_size = 0;
     int max_i = 0, max_j = 0;
     int dp[field.height][field.width];
 
