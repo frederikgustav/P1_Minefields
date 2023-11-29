@@ -1,8 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 #include "minefield_algorithms.h"
 
 int main(void) {
+    // Seed random generator
+    srand(time(NULL));
+
     struct minefield field = get_empty_minefield(4, 4, 1.0);
     field.matrix[0][0].mine = 1;
     field.matrix[1][2].mine = 1;

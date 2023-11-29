@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include "minefield_algorithms.h"
+
+int min(int a, int b);
+int factorial(int n);
 
 /**
  * Gives biggest cleared square in minefield
@@ -45,19 +47,6 @@ struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
     biggest_square.end_point.y = max_y;
 
     return biggest_square;
-}
-
-/**
- * Gives factorial of a number
- * @param n number
- * @return result
- */
-int factorial(int n) {
-    int result = n;
-    for (int i = n-1; i >= 1; --i) {
-        result *= i;
-    }
-    return result;
 }
 
 /**
@@ -189,4 +178,17 @@ int generate_permutations(int remaining_mine_amount, int mine_sum, int* permutat
  */
 int min(int a, int b) {
     return (a < b) ? a : b;
+}
+
+/**
+ * Gives factorial of a number
+ * @param n number
+ * @return result
+ */
+int factorial(int n) {
+    int result = n;
+    for (int i = n-1; i >= 1; --i) {
+        result *= i;
+    }
+    return result;
 }

@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <time.h>
 #include "minefields.h"
 
 /**
@@ -40,7 +39,6 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
  */
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount) {
     struct minefield field = get_empty_minefield(width, height, metric_square_length);
-    srand(time(NULL));
 
     // For-loop generating random mines
     for (int i = 0; i < mine_amount; ++i) {
