@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "..\src\minelib.h"
+#include "minelib.h"
 
 void test_get_empty_minefield();
 void test_get_random_minefield();
@@ -23,6 +23,14 @@ void test_get_empty_minefield() {
 }
 
 void test_get_random_minefield() {
-    struct minefield field = get_random_minefield(5, 5, 1, 5);
+    // Arrange
+    int width = 5;
+    int height = 5;
+    int amount = 5;
+
+    // Act
+    struct minefield field = get_random_minefield(width, height, 1, amount);
+
+
 
 }
