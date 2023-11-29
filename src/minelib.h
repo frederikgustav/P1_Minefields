@@ -44,7 +44,10 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
 struct minefield get_sub_minefield_copy(struct minefield field, struct point start_point, struct point end_point); // needs implementing
 struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field);
 
-int get_minefield_sum(struct minefield); // needs implementing
+int get_minefield_sum(struct minefield);
+
+int clear_area(struct minefield field, int mine_capacity);
+int minefield_permutation_generation(int remaining_mine_amount, int mine_sum, int* mutation);
 
 void print_minefield(struct minefield field);
 void free_minefield(struct minefield field);

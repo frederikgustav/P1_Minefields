@@ -3,9 +3,11 @@
 #include "minelib.h"
 
 int main(void) {
-    struct minefield field = get_random_minefield(20, 20, 1, 100);
-    print_minefield(field);
-    free_minefield(field);
+    struct minefield field = get_random_minefield(100, 100, 1, 4);
 
+    int amount = clear_area(field, 2);
+    printf("%d", amount);
+
+    free_minefield(field);
     return EXIT_SUCCESS;
 }

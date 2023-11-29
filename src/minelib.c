@@ -150,3 +150,85 @@ struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
     return biggest_square;
 }
 
+int factorial(int n) {
+    int result = n;
+    for (int i = n-1; i >= 1; --i) {
+        result *= i;
+    }
+    return result;
+}
+
+int clear_area(struct minefield field, int mine_capacity) {
+    int mine_sum = get_minefield_sum(field);
+    int* mutation = malloc(sizeof(int) * mine_sum);
+    for (int mine = 0; mine < mine_sum; ++mine) {
+        mutation[mine] = -1;
+    }
+
+    int result = minefield_permutation_generation(mine_sum-mine_capacity, mine_sum, mutation);
+    return result;
+}
+
+/**
+ * Recursively generates all binary permutations of a given array, representing the possible mines in a minefield.
+ * Each generated permutation is stored in the given permutation array.
+ * @param remaining_mine_amount amount of mines in a permutation.
+ * @param mine_sum amount of mines in total before clearing (length of a permutation).
+ * @param mutation dynamic permutation, changes as each permutation is generated.
+ * @return amount of generated permutations.
+ */
+int minefield_permutation_generation(int remaining_mine_amount, int mine_sum, int* mutation) {
+    int current_mine = -1;
+    int mine_count = 0;
+    int result = 0;
+
+    //
+    for (int mine = 0; mine < mine_sum; ++mine) {
+        if (mutation[mine] != -1) {
+            if (mutation[mine] == 1) {
+                mine_count++;
+            }
+        }
+        if (mutation[mine] == -1) {
+            current_mine = mine;
+            break;
+        }
+    }
+
+    if (current_mine == -1 && mine_count == remaining_mine_amount) {
+        printf("[");
+        for (int mine = 0; mine < mine_sum; ++mine) {
+            if (mutation[mine] != -1) {
+                printf("%d", mutation[mine]);
+            }
+        }
+        printf("]\n");
+        return 1;
+    } else if (current_mine != -1 && mine_count <= remaining_mine_amount) {
+        for (int is_mine = 0; is_mine < 2; ++is_mine) {
+            mutation[current_mine] = is_mine;
+            result += minefield_permutation_generation(remaining_mine_amount, mine_sum, mutation);
+            mutation[current_mine] = -1;
+        }
+        return result;
+    } else {
+        return 0;
+    }
+}
+
+/**
+ * Gives sum of mines in a minefield
+ * @param field minefield to check
+ * @return amount of mines
+ */
+int get_minefield_sum(struct minefield field) {
+    int sum = 0;
+    for (int y = 0; y < field.height; ++y) {
+        for (int x = 0; x < field.width; ++x) {
+            if (field.matrix[y][x].mine) {
+                sum++;
+            }
+        }
+    }
+    return sum;
+}
