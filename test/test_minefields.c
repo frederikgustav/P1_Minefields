@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "minelib.h"
+#include "minefields.h"
 
 void test_get_empty_minefield();
 void test_get_random_minefield();
