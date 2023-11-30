@@ -8,7 +8,7 @@ int main(void) {
     srand(time(NULL));
 
     int mines_removal_capacity = 5;
-    struct minefield field = get_random_minefield(20, 20, 1, 12);
+    struct minefield field = get_random_minefield(10, 10, 1, 10);
     struct sub_minefield area = get_biggest_clearable_sub_minefield(field, mines_removal_capacity);
 
     printf("Minefield:\n");
@@ -17,5 +17,6 @@ int main(void) {
     print_sub_minefield_in_minefield(field, area);
 
     free_minefield(field);
+
     return EXIT_SUCCESS;
 }

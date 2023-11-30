@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "minefield_algorithms.h"
 
 int min(int a, int b);
