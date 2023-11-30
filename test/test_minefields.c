@@ -1,12 +1,15 @@
 #include <stdlib.h>
 #include <assert.h>
-
-#include "minefields.h"
+#include <time.h>
+#include "minefield_algorithms.h"
 
 void test_get_empty_minefield();
 void test_get_random_minefield();
 
 int main(void) {
+    // Seed random generator
+    srand(time(NULL));
+
     test_get_empty_minefield();
     test_get_random_minefield();
 

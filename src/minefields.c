@@ -56,18 +56,6 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
     return field;
 }
 
-struct minefield get_minefield_copy(struct minefield field) {
-    struct minefield field_copy = get_empty_minefield(field.width, field.height, field.metric_square_length);
-
-    for (int y = 0; y < field.height; ++y) {
-        for (int x = 0; x < field.width; ++x) {
-            field_copy.matrix[y][x].mine = field.matrix[y][x].mine;
-        }
-    }
-
-    return field_copy;
-}
-
 /**
  * Prints a minefield, example:
  * | O O X |
@@ -81,6 +69,27 @@ void print_minefield(struct minefield field) {
 
         for (int x = 0; x < field.width; ++x) {
             if (field.matrix[y][x].mine == 0) {
+                printf("0  ");
+            } else {
+                printf("X  ");
+            }
+        }
+
+        printf("| \n");
+    }
+    printf("\n");
+}
+
+// highlights a sub minefield in a minefield with the char 8
+void print_sub_minefield_in_minefield(struct minefield field, struct sub_minefield sub_field) {
+    for (int y = 0; y < field.height; ++y) {
+        printf("| ");
+
+        for (int x = 0; x < field.width; ++x) {
+            if (y >= sub_field.start_point.y && y <= sub_field.end_point.y &&
+                x >= sub_field.start_point.x && x <= sub_field.end_point.x) {
+                printf("-  ");
+            } else if (field.matrix[y][x].mine == 0) {
                 printf("0  ");
             } else {
                 printf("X  ");

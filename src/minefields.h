@@ -33,8 +33,8 @@ struct sub_minefield {
 
 struct minefield get_empty_minefield(int width, int height, double metric_square_length);
 struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount);
-struct minefield get_minefield_copy(struct minefield field);
 
+void print_sub_minefield_in_minefield(struct minefield field, struct sub_minefield sub_field);
 void print_minefield(struct minefield field);
 void free_minefield(struct minefield field);
 

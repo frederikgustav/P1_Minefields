@@ -58,10 +58,6 @@ struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field) {
 struct sub_minefield get_biggest_clearable_sub_minefield(struct minefield field, int mine_capacity) {
     int mine_sum = get_minefield_sum(field);
     int permutation_amount = factorial(mine_sum)/(factorial(mine_capacity)*factorial(mine_sum-mine_capacity));
-    struct sub_minefield cleared_area = {
-            .start_point = {0, 0},
-            .end_point = {0, 0},
-    };
 
     // Create permutations array
     int** permutations = malloc(sizeof(int*) * permutation_amount);
@@ -79,8 +75,12 @@ struct sub_minefield get_biggest_clearable_sub_minefield(struct minefield field,
 
     // Map each permutation to the original minefield, and keep the biggest cleared_area
     int current_mine = 0;
-    int current_clearence = 0;
-    int this_clearence = 0;
+    struct sub_minefield max_cleared_area = {
+        .start_point = {0, 0},
+        .end_point = {0, 0},
+    };
+    struct sub_minefield current_cleared_area;
+
     for (int current_permutation = 0; current_permutation < permutation_amount; ++current_permutation) {
         // Map permutation to minefield
         struct minefield current_field = get_empty_minefield(field.width, field.height, field.metric_square_length);
@@ -94,26 +94,18 @@ struct sub_minefield get_biggest_clearable_sub_minefield(struct minefield field,
         }
         current_mine = 0;
 
-        // Get the biggest cleared area
-        struct sub_minefield biggest_cleared_area = get_biggest_cleared_sub_minefield(current_field);
-        current_clearence = (biggest_cleared_area.end_point.x - biggest_cleared_area.start_point.x + 1) *
-                            (biggest_cleared_area.end_point.y - biggest_cleared_area.start_point.y + 1);
-        this_clearence = (cleared_area.end_point.x - cleared_area.start_point.x + 1) *
-                         (cleared_area.end_point.y - cleared_area.start_point.y + 1);
+        // Get cleared area
+        current_cleared_area = get_biggest_cleared_sub_minefield(current_field);
 
-        // If current cleared area is bigger than the previous biggest cleared area, set it as the new biggest cleared area
-        if (current_clearence > this_clearence) {
-            cleared_area = biggest_cleared_area;
+        // Update max cleared area
+        if (get_sub_minefield_area(current_cleared_area) > get_sub_minefield_area(max_cleared_area)) {
+            max_cleared_area = current_cleared_area;
         }
-
-        // print minefield
-        printf("Permutation %d:\n", current_permutation);
-        print_minefield(current_field);
 
         free_minefield(current_field);
     }
 
-    return cleared_area;
+    return max_cleared_area;
 }
 
 /**
@@ -191,4 +183,13 @@ int factorial(int n) {
         result *= i;
     }
     return result;
+}
+
+/**
+ * Gives the area of a sub minefield
+ * @param area the sub minefield
+ * @return
+ */
+int get_sub_minefield_area(struct sub_minefield area) {
+    return (area.end_point.x - area.start_point.x + 1) * (area.end_point.y - area.start_point.y + 1);
 }
