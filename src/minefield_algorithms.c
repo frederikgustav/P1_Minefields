@@ -3,10 +3,9 @@
 #include "minefield_algorithms.h"
 
 /**
- * Gives biggest cleared square in minefield
- * @param field the parameter field is used to provide information about the generated minefield for this function
- * to find the largest possible area within the minefield that can be cleared (that has as many mines as possible)
- * @return it retures the area that contains the most mines
+ * Gives biggest cleared zone in a minefield
+ * @param field the minefield to check for largest cleared zone
+ * @return biggest cleared zone
  */
 zone get_biggest_cleared_zone(minefield field) {
     int max_zone = 0;
@@ -50,25 +49,25 @@ zone get_biggest_cleared_zone(minefield field) {
 }
 
 /**
- * Gives biggest clearable area in a minefield
- * @param field
- * @param mine_capacity
- * @return
+ * Gives biggest clearable zone in a minefield
+ * @param field the minefield to check for largest clearable zone
+ * @param mine_capacity the amount of mines that can be cleared
+ * @return biggest clearable zone
  */
 zone get_biggest_clearable_zone(minefield field, int mine_capacity) {
     int start_mine_count = get_minefield_sum(field);
     int final_mine_count = start_mine_count - mine_capacity;
 
-    // Create seed permutation
+    // Create seed permutation, example: [-1, -1, -1, -1]
     int* permutation = malloc(sizeof(int) * start_mine_count);
     for (int mine = 0; mine < start_mine_count; ++mine) {
         permutation[mine] = -1;
     }
 
-    // Create best permutation
+    // Create int array to store best permutation, initialized as all 1s, example: [1, 1, 1, 1]
     int* best_permutation = malloc(sizeof(int) * start_mine_count);
     for (int mine = 0; mine < start_mine_count; ++mine) {
-        best_permutation[mine] = 1; // 1 to prioritize this the least
+        best_permutation[mine] = 1;
     }
 
     int permutation_amount = check_permutations(field, final_mine_count, start_mine_count, permutation, best_permutation);
@@ -77,6 +76,12 @@ zone get_biggest_clearable_zone(minefield field, int mine_capacity) {
     return get_biggest_cleared_zone_from_permutation(field, best_permutation);
 }
 
+/**
+ * Gives biggest cleared zone in a minefield from a permutation, example: [1, 0, 1, 0, 0, 1]
+ * @param field the original minefield, on which the permutation can be applied
+ * @param permutation the permutation to check
+ * @return biggest cleared zone
+ */
 zone get_biggest_cleared_zone_from_permutation(minefield field, const int* permutation) {
     int current_mine = 0;
 
@@ -98,6 +103,15 @@ zone get_biggest_cleared_zone_from_permutation(minefield field, const int* permu
     return cleared_zone;
 }
 
+/**
+ * Checks all permutations of a minefield
+ * @param field the minefield to check
+ * @param final_mine_count the amount of mines that should be left after clearing
+ * @param start_mine_count the amount of mines in the minefield, also the length the permutations
+ * @param permutation the current permutation
+ * @param best_permutation the best permutation
+ * @return amount of permutations checked
+ */
 int check_permutations(minefield field, int final_mine_count, int start_mine_count, int* permutation, int* best_permutation) {
     int current_mine = -1;
     int mine_count = 0;
