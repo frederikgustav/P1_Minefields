@@ -5,3 +5,7 @@ zone get_biggest_clearable_zone(minefield field, int mine_capacity);
 zone get_biggest_cleared_zone_from_permutation(minefield field, const int* permutation);
 
 int check_permutations(minefield field, int final_mine_count, int start_mine_count, int* permutation, int* best_permutation);
+
+zone quick_clear(minefield field, int mine_capacity);
+zone binary_zoning(minefield field, int mine_capacity, zone start_zone);
+zone expansion_zoning(minefield field, int mine_capacity, zone start_zone);
