@@ -114,6 +114,14 @@ void free_minefield(minefield field) {
     free(field.matrix);
 }
 
+/**
+ * Prints a minefield zone, example:
+ * | O O X |
+ * | X - - |
+ * | O - - |
+ * @param field the minefield to print
+ * @param zone the zone to print
+ */
 void print_minefield_zone(minefield field, zone zone) {
     for (int y = 0; y < field.height; ++y) {
         printf("| ");
