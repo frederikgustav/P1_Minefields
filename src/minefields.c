@@ -83,6 +83,58 @@ void print_minefield(minefield field) {
 }
 
 /**
+ * Gives sum of mines in a minefield
+ * @param field minefield to check
+ * @return amount of mines
+ */
+int get_minefield_sum(minefield field) {
+    int sum = 0;
+    for (int y = 0; y < field.height; ++y) {
+        for (int x = 0; x < field.width; ++x) {
+            if (field.matrix[y][x].mine) {
+                sum++;
+            }
+        }
+    }
+    return sum;
+}
+
+/**
+ * Deallocates memory for a minefields matrix
+ * @param field the minefield for which to deallocate memory
+ * Gives the sum of a specific zone in a minefield
+ * @param field the overall minefield
+ * @param zone the zone to get the sum of
+ * @return the sum of the zone
+ */
+void free_minefield(minefield field) {
+    for (int y = 0; y < field.height; ++y) {
+        free(field.matrix[y]);
+    }
+    free(field.matrix);
+}
+
+void print_minefield_zone(minefield field, zone zone) {
+    for (int y = 0; y < field.height; ++y) {
+        printf("| ");
+
+        for (int x = 0; x < field.width; ++x) {
+            if (y >= zone.start.y && y <= zone.end.y &&
+                x >= zone.start.x && x <= zone.end.x) {
+                printf("-  ");
+            } else if (field.matrix[y][x].mine == 0) {
+                printf("0  ");
+            } else {
+                printf("X  ");
+            }
+        }
+
+        printf("| \n");
+    }
+    printf("\n");
+}
+
+/**
  * Gives the sum of a specific zone in a minefield
  * @param field the overall minefield
  * @param zone the zone to get the sum of
@@ -98,4 +150,13 @@ int get_zone_mine_sum(minefield field, zone zone) {
         }
     }
     return mine_sum;
+}
+
+/**
+ * Gives the area of a specific zone
+ * @param zone the zone to get the area of
+ * @return the area of the zone
+ */
+int get_zone_area(zone zone) {
+    return (zone.end.x - zone.start.x + 1) * (zone.end.y - zone.start.y + 1);
 }
