@@ -189,16 +189,16 @@ zone binary_zoning(minefield field, int mine_capacity, zone current_zone){
         // select lowest count zone
         if (up_r_count <= low_r_count && up_r_count <= up_l_count && up_r_count <= low_l_count) {
             print_minefield_zone(field, up_r);
-            return fbinary_zoning(field, mine_capacity, up_r);
+            return binary_zoning(field, mine_capacity, up_r);
         } else if (low_r_count <= up_r_count && low_r_count <= up_l_count && low_r_count <= low_l_count) {
             print_minefield_zone(field, low_r);
-            return fbinary_zoning(field, mine_capacity, low_r);
+            return binary_zoning(field, mine_capacity, low_r);
         } else if (up_l_count <= up_r_count && up_l_count <= low_r_count && up_l_count <= low_l_count) {
             print_minefield_zone(field, up_l);
-            return fbinary_zoning(field, mine_capacity, up_l);
+            return binary_zoning(field, mine_capacity, up_l);
         } else {
             print_minefield_zone(field, low_l);
-            return fbinary_zoning(field, mine_capacity, low_l);
+            return binary_zoning(field, mine_capacity, low_l);
         }
     }
 }
