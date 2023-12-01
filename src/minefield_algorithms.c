@@ -141,3 +141,63 @@ int check_permutations(minefield field, int final_mine_count, int start_mine_cou
         return 0;
     }
 }
+
+zone binary_zoning(minefield field, int mine_capacity, zone start_zone){
+    // Base case: If there are no mines left to clear or only one cell in the zone
+    if (mine_capacity <= 0 || start_zone.start.x > start_zone.end.x || start_zone.start.y > start_zone.end.y) {
+        return start_zone;
+    }
+
+    // Check mines in the current quadrant
+    for (int y = start_zone.start.y; y <= start_zone.end.y; ++y) {
+        for (int x = start_zone.start.x; x < start_zone.end.x; ++x) {
+            if (field.matrix[y][x].mine){
+                field.matrix[y][x].mine = 0;
+                mine_capacity--;
+            }
+        }
+    }
+    // Divide the current zone into two part horizontally or vertically
+    int midX = (start_zone.start.x + start_zone.end.x) / 2;
+    int midY = (start_zone.start.y + start_zone.end.y) / 2;
+
+    zone upper_zone = {start_zone.start, {midX, midY}};
+    zone lower_zone = {{start_zone.start.x, midY + 1}, start_zone.end};
+    zone left_zone = {start_zone.start, {midX, start_zone.end.y}};
+    zone right_zone = {{midX + 1, start_zone.start.y}, start_zone.end};
+
+    // Recursively performing binary zoning in each sub-zone
+    zone upper_best = binary_zoning(field, mine_capacity, upper_zone);
+    zone lower_best = binary_zoning(field, mine_capacity, lower_zone);
+    zone left_best = binary_zoning(field, mine_capacity, left_zone);
+    zone right_best = binary_zoning(field, mine_capacity, right_zone);
+
+    // Compare the cleared areas in each sub-zone and return the best one
+    int upper_area = get_zone_area(upper_best);
+    int lower_area = get_zone_area(lower_best);
+    int left_area = get_zone_area(left_best);
+    int right_area = get_zone_area(right_best);
+
+    zone best_zone = start_zone; // Default back to current zone.
+    int best_area = get_zone_area(best_zone);
+
+    if (upper_area > best_area) {
+        best_zone = upper_best;
+        best_area = upper_area;
+    }
+    if (lower_area > best_area) {
+        best_zone = lower_best;
+        best_area = lower_area;
+    }
+    if (left_area > best_area) {
+        best_zone = left_best;
+        best_area = left_area;
+    }
+    if (right_area > best_area) {
+        best_zone = right_best;
+        best_area = right_area;
+    }
+
+    return best_zone;
+
+}
