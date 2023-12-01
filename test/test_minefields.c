@@ -20,10 +20,9 @@ void test_get_empty_minefield() {
     /* Arrange */
     int width = 5;
     int height = 5;
-    int metric_square_length = 1;
 
     /* Act */
-    struct minefield field = get_empty_minefield(width, height, metric_square_length);
+    minefield field = get_empty_minefield(width, height);
 
     /* Assert */
     // Nested for-loop to check matrix positions for mines
@@ -40,14 +39,13 @@ void test_get_random_minefield() {
     //Variables for Act
     int width = 5;
     int height = 5;
-    int metric_square_length = 1;
     int amount = 5;
 
     //Variable for Assert
     int assert_counter = 0;
 
     /* Act */
-    struct minefield field = get_random_minefield(width, height, metric_square_length, amount);
+    minefield field = get_random_minefield(width, height, amount);
 
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {

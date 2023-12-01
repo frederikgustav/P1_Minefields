@@ -1,10 +1,7 @@
 #include "minefields.h"
 
-struct sub_minefield get_biggest_cleared_sub_minefield(struct minefield field);
-struct sub_minefield get_biggest_clearable_sub_minefield(struct minefield field, int mine_capacity);
-struct sub_minefield get_biggest_sub_minefield_from_permutation(struct minefield field, const int* permutation);
+zone get_biggest_cleared_zone(minefield field);
+zone get_biggest_clearable_zone(minefield field, int mine_capacity);
+zone get_biggest_cleared_zone_from_permutation(minefield field, const int* permutation);
 
-int generate_permutations(struct minefield field, int remaining_mine_amount, int mine_sum, int* permutation, int* best_permutation);
-
-int get_sub_minefield_area(struct sub_minefield area);
-
+int check_permutations(minefield field, int final_mine_count, int start_mine_count, int* permutation, int* best_permutation);
