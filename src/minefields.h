@@ -1,41 +1,42 @@
 /*
  * Represents a point in a known minefield.
  */
-struct point {
+typedef struct point {
     int x;
     int y;
-};
+} point;
 
 /*
  * Represents a single square in minefield.
  */
-struct square {
-    int mine; //bool
-};
+typedef struct square {
+    int mine; // bool
+} square;
 
 /*
  * Represents a minefield, with a matrix of squares.
  */
-struct minefield {
+typedef struct minefield {
     int width;
     int height;
-    struct square** matrix; // 2d array
-    double metric_square_length; // height and length in meters
-};
+    struct square** matrix;
+} minefield;
 
 /*
- * Represents a sub minefield
+ * Represents a
  */
-struct sub_minefield {
-    struct point start_point;
-    struct point end_point;
-};
+typedef struct zone {
+    point start;
+    point end;
+} zone;
 
-struct minefield get_empty_minefield(int width, int height, double metric_square_length);
-struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount);
+minefield get_empty_minefield(int width, int height);
+minefield get_random_minefield(int width, int height, int mine_count);
 
-void print_sub_minefield_in_minefield(struct minefield field, struct sub_minefield sub_field);
-void print_minefield(struct minefield field);
-void free_minefield(struct minefield field);
+void print_minefield_zone(minefield field, zone zone);
+void print_minefield(minefield field);
+void free_minefield(minefield field);
 
 int get_minefield_sum(struct minefield field);
+int get_zone_area(zone zone);
+int get_zone_mine_sum(minefield field, zone zone);

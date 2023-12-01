@@ -10,12 +10,11 @@
  * @return the function returns a struct representing an empty minefield with the specified
  * dimensions and square length, where all squares initially have no mines.
  */
-struct minefield get_empty_minefield(int width, int height, double metric_square_length) {
-    struct minefield field;
+minefield get_empty_minefield(int width, int height) {
+    minefield field;
 
     field.height = height;
     field.width = width;
-    field.metric_square_length = metric_square_length;
     field.matrix = malloc(sizeof(struct square *) * height);
 
     for (int y = 0; y < height; ++y) {
@@ -37,8 +36,8 @@ struct minefield get_empty_minefield(int width, int height, double metric_square
  * @return the function returns a minefield with randomly placed mines based on the specified dimensions,
  * square length, and the number of mines to be placed.
  */
-struct minefield get_random_minefield(int width, int height, double metric_square_length, int mine_amount) {
-    struct minefield field = get_empty_minefield(width, height, metric_square_length);
+minefield get_random_minefield(int width, int height, int mine_amount) {
+    minefield field = get_empty_minefield(width, height);
 
     // For-loop generating random mines
     for (int i = 0; i < mine_amount; ++i) {
@@ -63,7 +62,7 @@ struct minefield get_random_minefield(int width, int height, double metric_squar
  * | O O X |
  * @param field this parameter is used to access information about the minefield and print its contents
  */
-void print_minefield(struct minefield field) {
+void print_minefield(minefield field) {
     for (int y = 0; y < field.height; ++y) {
         printf("| ");
 
@@ -80,14 +79,13 @@ void print_minefield(struct minefield field) {
     printf("\n");
 }
 
-// highlights a sub minefield in a minefield with the char 8
-void print_sub_minefield_in_minefield(struct minefield field, struct sub_minefield sub_field) {
+void print_minefield_zone(minefield field, zone zone) {
     for (int y = 0; y < field.height; ++y) {
         printf("| ");
 
         for (int x = 0; x < field.width; ++x) {
-            if (y >= sub_field.start_point.y && y <= sub_field.end_point.y &&
-                x >= sub_field.start_point.x && x <= sub_field.end_point.x) {
+            if (y >= zone.start.y && y <= zone.end.y &&
+                x >= zone.start.x && x <= zone.end.x) {
                 printf("-  ");
             } else if (field.matrix[y][x].mine == 0) {
                 printf("0  ");
@@ -105,7 +103,7 @@ void print_sub_minefield_in_minefield(struct minefield field, struct sub_minefie
  * Deallocates memory for a minefields matrix
  * @param field the minefield for which to deallocate memory
  */
-void free_minefield(struct minefield field) {
+void free_minefield(minefield field) {
     for (int y = 0; y < field.height; ++y) {
         free(field.matrix[y]);
     }
@@ -117,7 +115,7 @@ void free_minefield(struct minefield field) {
  * @param field minefield to check
  * @return amount of mines
  */
-int get_minefield_sum(struct minefield field) {
+int get_minefield_sum(minefield field) {
     int sum = 0;
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
@@ -127,4 +125,21 @@ int get_minefield_sum(struct minefield field) {
         }
     }
     return sum;
+}
+
+
+int get_zone_area(zone zone) {
+    return (zone.end.x - zone.start.x + 1) * (zone.end.y - zone.start.y + 1);
+}
+
+int get_zone_mine_sum(minefield field, zone zone) {
+    int mine_sum = 0;
+    for (int y = zone.start.y; y <= zone.end.y; ++y) {
+        for (int x = zone.start.x; x <= zone.end.x; ++x) {
+            if (field.matrix[y][x].mine == 1) {
+                mine_sum++;
+            }
+        }
+    }
+    return mine_sum;
 }
