@@ -161,23 +161,19 @@ int check_permutations(minefield field, int final_mine_count, int start_mine_cou
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
  * @param current_zone the zone to start with
- * @return
+ * @return the best approximate zone
  */
 zone binary_zoning(minefield field, int mine_capacity, zone current_zone){
     // Base case: if all mines can be cleared, return that zone
     if (mine_capacity >= get_zone_mine_sum(field, current_zone) || get_zone_area(current_zone) == 2) {
-        printf("Base case: \n");
-        print_minefield_zone(field, current_zone);
         return current_zone;
     } else {
         int midX = (current_zone.start.x + current_zone.end.x) / 2;
         int midY = (current_zone.start.y + current_zone.end.y) / 2;
 
         zone up_r = {current_zone.start, {midX, midY}};
-        zone low_r = {{current_zone.start.x, midY + 1},
-                      {midX,                 current_zone.end.y}};
-        zone up_l = {{midX + 1,           current_zone.start.y},
-                     {current_zone.end.x, midY}};
+        zone low_r = {{current_zone.start.x, midY + 1},{midX,current_zone.end.y}};
+        zone up_l = {{midX + 1, current_zone.start.y},{current_zone.end.x, midY}};
         zone low_l = {{midX + 1, midY + 1}, current_zone.end};
 
         // find the zone with the least mines
