@@ -103,13 +103,25 @@ int check_minefield_permutations(minefield field, zone* best_clearable_zone, int
 }
 
 /**
+ * Combines binary and expansion zoning to approximate the best clearable zone
+ * @param field the minefield
+ * @param mine_capacity the amount of mines that can be cleared
+ * @return the best approximate zone
+ */
+zone quick_clear(minefield field, int mine_capacity) {
+    zone zone = binary_zoning(field, mine_capacity);
+    zone = expansion_zoning(field, mine_capacity, zone);
+    return zone;
+}
+
+/**
  * Divides the minefield into 4 zones until the mine capacity is reached
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
  * @param current_zone the zone to start with
  * @return the best approximate zone
  */
-zone binary_zoning(minefield field, int mine_capacity){
+zone binary_zoning(minefield field, int mine_capacity) {
     zone current_zone = {{0,0}, {field.width - 1, field.height - 1}};
     while (mine_capacity < get_zone_mine_sum(field, current_zone)) {
         int midX = (current_zone.start.x + current_zone.end.x) / 2;
@@ -138,4 +150,39 @@ zone binary_zoning(minefield field, int mine_capacity){
         }
     }
     return current_zone;
+}
+
+/**
+ * Expands the given zone until the mine capacity is reached, or until the zone cannot be expanded more
+ * @param field the minefield
+ * @param mine_capacity the amount of mines that can be cleared
+ * @param current_zone the zone to start with
+ * @return the best approximate zone
+ */
+zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
+    // generate zones expanded to the left, right, up and down
+    zone left_zone = {{current_zone.start.x - 1, current_zone.start.y}, {current_zone.end.x, current_zone.end.y}};
+    zone right_zone = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x + 1, current_zone.end.y}};
+    zone up_zone = {{current_zone.start.x, current_zone.start.y - 1}, {current_zone.end.x, current_zone.end.y}};
+    zone down_zone = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x, current_zone.end.y + 1}};
+
+    // get counts
+    int left_count = get_zone_mine_sum(field, left_zone);
+    int right_count = get_zone_mine_sum(field, right_zone);
+    int up_count = get_zone_mine_sum(field, up_zone);
+    int down_count = get_zone_mine_sum(field, down_zone);
+
+    // get zone areas
+    int left_area = get_zone_area(left_zone);
+    int right_area = get_zone_area(right_zone);
+    int up_area = get_zone_area(up_zone);
+    int down_area = get_zone_area(down_zone);
+
+    // calculate factors for each zone
+    double left_factor = (double) left_count / left_area;
+    double right_factor = (double) right_count / right_area;
+    double up_factor = (double) up_count / up_area;
+    double down_factor = (double) down_count / down_area;
+
+
 }
