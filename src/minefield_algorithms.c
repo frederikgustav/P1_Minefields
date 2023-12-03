@@ -58,13 +58,13 @@ zone get_biggest_clearable_zone(minefield field, int mine_capacity) {
     int start_mine_count = get_minefield_sum(field);
     int final_mine_count = start_mine_count - mine_capacity;
 
-    // Create seed permutation, example: [-1, -1, -1, -1]
+    // Create seed permutation [-1, -1, ... -1]
     int* permutation = malloc(sizeof(int) * start_mine_count);
     for (int mine = 0; mine < start_mine_count; ++mine) {
         permutation[mine] = -1;
     }
 
-    // Create int array to store best permutation, initialized as all 1s, example: [1, 1, 1, 1]
+    // Create int array to store best permutation, initialized as all 1s, example: [1, 1, ... 1]
     int* best_permutation = malloc(sizeof(int) * start_mine_count);
     for (int mine = 0; mine < start_mine_count; ++mine) {
         best_permutation[mine] = 1;
@@ -77,7 +77,7 @@ zone get_biggest_clearable_zone(minefield field, int mine_capacity) {
 }
 
 /**
- * Gives biggest cleared zone in a minefield from a permutation, example: [1, 0, 1, 0, 0, 1]
+ * Gives biggest cleared zone in a minefield from a permutation, example: [1, 0, ... 1]
  * @param field the original minefield, on which the permutation can be applied
  * @param permutation the permutation to check
  * @return biggest cleared zone
@@ -198,3 +198,12 @@ zone binary_zoning(minefield field, int mine_capacity, zone current_zone){
         }
     }
 }
+
+/**
+ * exansion_zoning
+ * expands the zone up, left, right or down, depending on which direction yields the most area, until the mine capacity is reached
+ * @param field the minefield
+ * @param mine_capacity the amount of mines that can be cleared
+ * @param current_zone the zone to start with
+ * @return the best approximate zone
+ */

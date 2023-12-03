@@ -6,28 +6,20 @@
 int main(void) {
     // Seed random generator
     srand(time(NULL));
-    double time_spent = 0.0;
 
-    int mines_removal_capacity = 7;
-    int mines = 20;
+    int mines_removal_capacity = 1;
+    int mines = 50;
     minefield field = get_random_minefield(10, 10, mines);
+    zone start_zone = {{0, 0}, {9, 9}};
 
-    clock_t c0 = clock();
-    zone zone = get_biggest_clearable_zone(field, mines_removal_capacity);
-    clock_t c1 = clock();
-    double runtime_diff_ms = (c1 - c0) * 1000. / CLOCKS_PER_SEC;
-    // convert runtime_diff_ms to seconds
-    runtime_diff_ms /= 1000;
-
-    printf("Minefield:\n");
+    printf("Minefield: \n");
     print_minefield(field);
-    printf("Biggest clearable sub minefield, if %d mines can be cleared:\n", mines_removal_capacity);
-    print_minefield_zone(field, zone);
 
+    zone zone1 = binary_zoning(field, mines_removal_capacity, start_zone);
 
-    printf("Runtime: %f s\n", runtime_diff_ms);
+    printf("Zone: \n");
+    print_minefield_zone(field, zone1);
 
     free_minefield(field);
-
     return EXIT_SUCCESS;
 }
