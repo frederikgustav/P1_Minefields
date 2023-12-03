@@ -103,17 +103,15 @@ int check_minefield_permutations(minefield field, zone* best_clearable_zone, int
 }
 
 /**
- * Recursively divides the minefield into 4 zones until the mine capacity is reached
+ * Divides the minefield into 4 zones until the mine capacity is reached
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
  * @param current_zone the zone to start with
  * @return the best approximate zone
  */
-zone binary_zoning(minefield field, int mine_capacity, zone current_zone){
-    // Base case: if all mines can be cleared, return that zone
-    if (mine_capacity >= get_zone_mine_sum(field, current_zone) || get_zone_area(current_zone) == 2) {
-        return current_zone;
-    } else {
+zone binary_zoning(minefield field, int mine_capacity){
+    zone current_zone = {{0,0}, {field.width - 1, field.height - 1}};
+    while (mine_capacity < get_zone_mine_sum(field, current_zone)) {
         int midX = (current_zone.start.x + current_zone.end.x) / 2;
         int midY = (current_zone.start.y + current_zone.end.y) / 2;
 
@@ -130,17 +128,14 @@ zone binary_zoning(minefield field, int mine_capacity, zone current_zone){
 
         // select lowest count zone
         if (up_r_count <= low_r_count && up_r_count <= up_l_count && up_r_count <= low_l_count) {
-            print_minefield_zone(field, up_r);
-            return binary_zoning(field, mine_capacity, up_r);
+            current_zone = up_r;
         } else if (low_r_count <= up_r_count && low_r_count <= up_l_count && low_r_count <= low_l_count) {
-            print_minefield_zone(field, low_r);
-            return binary_zoning(field, mine_capacity, low_r);
+            current_zone = low_r;
         } else if (up_l_count <= up_r_count && up_l_count <= low_r_count && up_l_count <= low_l_count) {
-            print_minefield_zone(field, up_l);
-            return binary_zoning(field, mine_capacity, up_l);
+            current_zone = up_l;
         } else {
-            print_minefield_zone(field, low_l);
-            return binary_zoning(field, mine_capacity, low_l);
+            current_zone = low_l;
         }
     }
+    return current_zone;
 }
