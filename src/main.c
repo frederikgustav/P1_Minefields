@@ -7,19 +7,14 @@ int main(void) {
     // Seed random generator
     srand(time(NULL));
 
-    int mines_removal_capacity = 1;
-    int mines = 50;
-    minefield field = get_random_minefield(10, 10, mines);
-    zone start_zone = {{0, 0}, {9, 9}};
-
-    printf("Minefield: \n");
+    minefield field = get_random_minefield(8, 8, 14);
     print_minefield(field);
+    printf("\n");
 
-    zone zone1 = binary_zoning(field, mines_removal_capacity, start_zone);
+    zone zone = get_biggest_clearable_zone(field, 4);
 
-    printf("Zone: \n");
-    print_minefield_zone(field, zone1);
+    print_minefield(field);
+    print_minefield_zone(field, zone);
 
-    free_minefield(field);
     return EXIT_SUCCESS;
 }
