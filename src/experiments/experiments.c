@@ -95,7 +95,11 @@ char* get_new_log_folder() {
     }
 
     sprintf(foldername, "experiments_output/experiment_%d", n);
-    mkdir(foldername);
+    int made_folder = mkdir(foldername);
+    if (made_folder != 0) {
+        printf("Could not make folder %s\n", foldername);
+        exit(EXIT_FAILURE);
+    }
 
     return foldername;
 }
@@ -128,6 +132,11 @@ FILE* get_new_log_file(char* folder, int final) {
     }
 
     fp = fopen(filename, "w");
+
+    if (fp == NULL) {
+        printf("Could not open or make file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
 
     return fp;
 }
