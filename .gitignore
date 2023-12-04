@@ -1,5 +1,5 @@
 # Misc
-src/experiments_output/*.txt
+src/experiments_output/**
 
 # Prerequisites
 *.d
