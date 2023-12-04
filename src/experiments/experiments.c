@@ -2,9 +2,12 @@
 #include <math.h>
 #include <time.h>
 #include <sys/stat.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include "experiments.h"
 #include "../minefield_algorithms/minefield_algorithms.h"
+
+struct stat st = {0};
 
 double percent_error(double expected, double actual);
 FILE* get_new_log_file(char* folder, int final);
@@ -13,10 +16,14 @@ char* get_new_log_folder();
 void mulitiple_experiment_runs(int width, int height, int mine_count, int runs) {
     char* folder = get_new_log_folder();
 
+    printf("Doing runs: ");
     for (int i = 1; i <= runs; ++i) {
-        printf("Doing run_%d\n", i);
+        printf("%d, ", i);
         experiment_run(width, height, mine_count, folder);
     }
+
+    // print full path to folder
+    printf("\nSaved results of experiment in folder: %s\n", folder);
 
     free(folder);
 }
@@ -84,6 +91,15 @@ double percent_error(double expected, double actual) {
 }
 
 char* get_new_log_folder() {
+    // make experiments_output folder if it doesn't exist
+    if (stat("experiments_output", &st) == -1) {
+        int made_folder = mkdir("experiments_output");
+        if (made_folder != 0) {
+            printf("Could not make folder experiments_output\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
     int n = 1;
     char* foldername;
 
