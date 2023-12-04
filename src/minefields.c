@@ -164,3 +164,14 @@ int get_zone_mine_sum(minefield field, zone zone) {
 int get_zone_area(zone zone) {
     return (zone.end.x - zone.start.x + 1) * (zone.end.y - zone.start.y + 1);
 }
+
+/**
+ * Gives 1 if the given zone is valid, 0 otherwise, valid implies that the zone is within the minefield
+ * @param zone the zone to check
+ * @param field the minefield to check the zone against
+ * @return
+ */
+int is_valid_zone(minefield field, zone zone) {
+    return zone.start.x >= 0 && zone.start.y >= 0 &&
+           zone.end.x < field.width && zone.end.y < field.height;
+}
