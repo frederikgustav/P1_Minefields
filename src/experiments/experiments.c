@@ -5,27 +5,11 @@
 #include "../minefield_algorithms/minefield_algorithms.h"
 
 double percent_error(double expected, double actual);
+FILE* get_new_log_file();
 
 void run_comparison_experiment(int width, int height, int mine_count) {
     int mine_removal_capacity = mine_count-1;
-    FILE *fp;
-    int n = 1;
-
-    while (1) {
-        char filename[100];
-        sprintf(filename, "experiments_output/log%d.txt", n);
-        fp = fopen(filename, "r");
-        if (fp == NULL) {
-            break;
-        }
-        ++n;
-        fclose(fp);
-    }
-
-    // make new log file
-    char filename[100];
-    sprintf(filename, "experiments_output/log%d.txt", n);
-    fp = fopen(filename, "w");
+    FILE *fp = get_new_log_file();
 
     // write clocks per second
     fprintf(fp, "CLOCKS_PER_SEC: %d\n", CLOCKS_PER_SEC);
@@ -66,4 +50,26 @@ double percent_error(double expected, double actual) {
     /* Gets percentage error */
     double error_rate = 100-(((fabs(actual-expected))/expected)*100);
     return error_rate;
+}
+
+FILE* get_new_log_file() {
+    FILE *fp;
+    int n = 1;
+
+    while (1) {
+        char filename[100];
+        sprintf(filename, "experiments_output/log%d.txt", n);
+        fp = fopen(filename, "r");
+        if (fp == NULL) {
+            break;
+        }
+        ++n;
+        fclose(fp);
+    }
+
+    char filename[100];
+    sprintf(filename, "experiments_output/log%d.txt", n);
+    fp = fopen(filename, "w");
+
+    return fp;
 }
