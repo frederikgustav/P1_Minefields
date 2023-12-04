@@ -45,7 +45,7 @@ void test_get_random_minefield() {
     int height = 5;
     int amount = 5;
 
-    //Variable for Assert
+    // Variable for Assert
     int assert_counter = 0;
 
     /* Act */
@@ -69,50 +69,56 @@ void test_get_zone_mine_sum() {
     //Variables for Act
     int width = 5;
     int height = 5;
-    minefield field;
-
-    // Initialize the minefield matrix with no mines
-    field.height = height;
-    field.width = width;
-    for (int y = 0; y < field.height; ++y) {
-        for (int x = 0; x < field.width; ++x) {
-            field.matrix[y][x].mine = 0;
-        }
-    }
+    minefield field = get_empty_minefield(width, height);
 
     // Place mines at specific positions
+    field.matrix[0][0].mine = 1;
     field.matrix[1][2].mine = 1;
     field.matrix[2][3].mine = 1;
     field.matrix[3][1].mine = 1;
     field.matrix[3][3].mine = 1;
     field.matrix[4][4].mine = 1;
 
-    zone biggest_rect;
-    biggest_rect.start.x = 1;
-    biggest_rect.start.y = 1;
-    biggest_rect.end.x = 4;
-    biggest_rect.end.y = 4;
+    zone test_zone = {{2, 2}, {4, 4}};
 
     /* Act */
-    int result = get_zone_mine_sum(field, biggest_rect);
+    int result = get_zone_mine_sum(field, test_zone);
 
     /* Assert */
-    assert(result == 5);  // Adjust the expected value based on your minefield matrix and zone
+    assert(result == 3);  // Adjust the expected value based on your minefield matrix and zone
 }
 
 void test_get_zone_area() {
     /* Arrange */
     //Variables for Act
-    zone testZone;
-    testZone.start.x = 1;
-    testZone.start.y = 1;
-    testZone.end.x = 4;
-    testZone.end.y = 4;
+    zone test_zone = {{1, 1}, {4, 4}};
 
     /* Act */
-    int result = get_zone_area(testZone);
+    int result = get_zone_area(test_zone);
 
     /* Assert */
-    //Calculate the area manually to check if function calculates it correctly. (hvorfor +1 hvis det alligevel giver 4?)
-    assert(result == 16);
+    //Calculate the area manually to check if function calculates it correctly.
+    assert(result == 9);
+}
+
+// test_get_biggest_cleared_zone()
+// test_get_biggest_clearable_zone()
+// test_binary_zoning()
+void test_get_minefield_sum() {
+    /* Arrange */
+    //Variables for Act
+    int width = 5;
+    int height = 5;
+    int amount = 5;
+
+    // Variable for Assert
+    int mine_counter;
+
+    /* Act */
+    minefield field = get_random_minefield(width, height, amount);
+
+    mine_counter = get_minefield_sum(field);
+
+    /* Assert */
+    assert(mine_counter == amount);
 }
