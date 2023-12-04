@@ -229,3 +229,16 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
     }
     return current_zone;
 }
+
+/**
+ * Expands the zone from the center using expansion zoning
+ * @param field the minefield
+ * @param mine_capacity the amount of mines that can be cleared
+ * @return the best approximate zone
+ */
+zone center_expansion(minefield field, int mine_capacity) {
+    point mid = {field.width / 2, field.height / 2};
+    zone current_zone = {mid, mid};
+
+    return expansion_zoning(field, mine_capacity, current_zone);
+}
