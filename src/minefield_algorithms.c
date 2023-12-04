@@ -65,24 +65,24 @@ zone get_biggest_clearable_zone(minefield field, int mine_removal_capacity) {
 /**
  * Recursively finds the biggest clearable zone in a minefield
  * @param field the minefield
- * @param best_clearable_zone output parameter for the best clearable zone
- * @param current_index the current index in the minefield
+ * @param best_zone output parameter for the best clearable zone
+ * @param index the current index in the minefield
  * @param final_mine_count the amount of mines in each valid permutation
  * @return the amount of valid permutations
  */
-int check_minefield_permutations(minefield field, zone* best_clearable_zone, int current_index, int final_mine_count) {
+int check_minefield_permutations(minefield field, zone* best_zone, int index, int final_mine_count) {
     int result = 0;
-    int x = current_index % field.width;
-    int y = current_index / field.width;
+    int x = index % field.width;
+    int y = index / field.width;
 
-    if (current_index == field.height * field.width) {
+    if (index == field.height * field.width) {
         if (get_minefield_sum(field) == final_mine_count) {
             zone biggest_cleared_zone = get_biggest_cleared_zone(field);
-            int best_clearable_zone_area = get_zone_area(*best_clearable_zone);
+            int best_clearable_zone_area = get_zone_area(*best_zone);
             int current_zone_area = get_zone_area(biggest_cleared_zone);
 
             if (current_zone_area > best_clearable_zone_area) {
-                *best_clearable_zone = biggest_cleared_zone;
+                *best_zone = biggest_cleared_zone;
                 return 1;
             }  else {
                 return 0;
@@ -91,11 +91,11 @@ int check_minefield_permutations(minefield field, zone* best_clearable_zone, int
             return 0;
         }
     } else if (field.matrix[y][x].mine != 1) {
-        return check_minefield_permutations(field, best_clearable_zone, current_index + 1, final_mine_count);
+        return check_minefield_permutations(field, best_zone, index + 1, final_mine_count);
     } else {
-        result += check_minefield_permutations(field, best_clearable_zone, current_index + 1, final_mine_count);
+        result += check_minefield_permutations(field, best_zone, index + 1, final_mine_count);
         field.matrix[y][x].mine = 0;
-        result += check_minefield_permutations(field, best_clearable_zone, current_index, final_mine_count);
+        result += check_minefield_permutations(field, best_zone, index, final_mine_count);
         field.matrix[y][x].mine = 1;
 
         return result;
@@ -183,6 +183,5 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
     double right_factor = (double) right_count / right_area;
     double up_factor = (double) up_count / up_area;
     double down_factor = (double) down_count / down_area;
-
 
 }

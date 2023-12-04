@@ -162,5 +162,5 @@ int get_zone_mine_sum(minefield field, zone zone) {
  * @return the area of the zone
  */
 int get_zone_area(zone zone) {
-    return (zone.end.x - zone.start.x + 1) * (zone.end.y - zone.start.y + 1);
+    return (zone.end.x - zone.start.x) * (zone.end.y - zone.start.y);
 }
