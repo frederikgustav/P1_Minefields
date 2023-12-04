@@ -85,15 +85,17 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
                 *best_zone = biggest_cleared_zone;
                 return 1;
             }  else {
-                return 0;
+                return 1;
             }
         } else {
             return 0;
         }
     } else if (field.matrix[y][x].mine != 1) {
-        return check_minefield_permutations(field, best_zone, index + 1, final_mine_count);
+        index++;
+        return check_minefield_permutations(field, best_zone, index, final_mine_count);
     } else {
-        result += check_minefield_permutations(field, best_zone, index + 1, final_mine_count);
+        index++;
+        result += check_minefield_permutations(field, best_zone, index, final_mine_count);
         field.matrix[y][x].mine = 0;
         result += check_minefield_permutations(field, best_zone, index, final_mine_count);
         field.matrix[y][x].mine = 1;
@@ -160,28 +162,49 @@ zone binary_zoning(minefield field, int mine_capacity) {
  * @return the best approximate zone
  */
 zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
-    // generate zones expanded to the left, right, up and down
-    zone left_zone = {{current_zone.start.x - 1, current_zone.start.y}, {current_zone.end.x, current_zone.end.y}};
-    zone right_zone = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x + 1, current_zone.end.y}};
-    zone up_zone = {{current_zone.start.x, current_zone.start.y - 1}, {current_zone.end.x, current_zone.end.y}};
-    zone down_zone = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x, current_zone.end.y + 1}};
+    while (1) {
+        // generate zones expanded to the left, right, up and down
+        zone left = {{current_zone.start.x - 1, current_zone.start.y}, {current_zone.end.x, current_zone.end.y}};
+        zone right = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x + 1, current_zone.end.y}};
+        zone up = {{current_zone.start.x, current_zone.start.y - 1}, {current_zone.end.x, current_zone.end.y}};
+        zone down = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x, current_zone.end.y + 1}};
 
-    // get counts
-    int left_count = get_zone_mine_sum(field, left_zone);
-    int right_count = get_zone_mine_sum(field, right_zone);
-    int up_count = get_zone_mine_sum(field, up_zone);
-    int down_count = get_zone_mine_sum(field, down_zone);
+        // if a zone is invalid, set its density to -1, else calculate its density
+        double left_density = is_valid_zone(field, left) ? (double) get_zone_mine_sum(field, left) / get_zone_area(left) : 2;
+        double right_density = is_valid_zone(field, right) ? (double) get_zone_mine_sum(field, right) / get_zone_area(right) : 2;
+        double up_density = is_valid_zone(field, up) ? (double) get_zone_mine_sum(field, up) / get_zone_area(up) : 2;
+        double down_density = is_valid_zone(field, down) ? (double) get_zone_mine_sum(field, down) / get_zone_area(down) : 2;
 
-    // get zone areas
-    int left_area = get_zone_area(left_zone);
-    int right_area = get_zone_area(right_zone);
-    int up_area = get_zone_area(up_zone);
-    int down_area = get_zone_area(down_zone);
+        // if zone is valid, meaning not -1, check if there are too many mines in the zone, if so set density to 1
+        if (left_density != 2) {
+            if (get_zone_mine_sum(field, left) > mine_capacity) {
+                left_density = 2;
+            }
+        } if (right_density != 2) {
+            if (get_zone_mine_sum(field, right) > mine_capacity) {
+                right_density = 2;
+            }
+        } if (up_density != 2) {
+            if (get_zone_mine_sum(field, up) > mine_capacity) {
+                up_density = 2;
+            }
+        } if (down_density != 2) {
+            if (get_zone_mine_sum(field, down) > mine_capacity) {
+                down_density = 2;
+            }
+        }
 
-    // calculate factors for each zone
-    double left_factor = (double) left_count / left_area;
-    double right_factor = (double) right_count / right_area;
-    double up_factor = (double) up_count / up_area;
-    double down_factor = (double) down_count / down_area;
-
+        if (left_density != 2 && left_density < right_density && left_density < up_density && left_density < down_density) {
+            current_zone = left;
+        } else if (right_density != 2 && right_density < left_density && right_density < up_density && right_density < down_density) {
+            current_zone = right;
+        } else if (up_density != 2 && up_density < left_density && up_density < right_density && up_density < down_density) {
+            current_zone = up;
+        } else if (down_density != 2 && down_density < left_density && down_density < right_density && down_density < up_density) {
+            current_zone = down;
+        } else {
+            break;
+        }
+    }
+    return current_zone;
 }
