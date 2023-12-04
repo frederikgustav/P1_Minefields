@@ -17,6 +17,7 @@ void mulitiple_experiment_runs(int width, int height, int mine_count, int runs) 
         printf("Doing run_%d\n", i);
         experiment_run(width, height, mine_count, folder);
     }
+
     free(folder);
 }
 
@@ -25,7 +26,8 @@ void experiment_run(int width, int height, int mine_count, char* folder) {
     FILE *fp = get_new_log_file(folder, 0);
 
     // write header names
-    fprintf(fp, "remaining_mines, Area, Clocks, Area percentage, Clocks, Area percentage, Clocks\n");
+    fprintf(fp, "General info, Bruteforce, , Quick Clear, , Center expansion, \n");
+    fprintf(fp, "Remaining mines, Area, Clocks, Area percentage, Clocks, Area percentage, Clocks \n");
 
     minefield field = get_random_minefield(width, height, mine_count);
 
@@ -36,7 +38,7 @@ void experiment_run(int width, int height, int mine_count, char* folder) {
         int correct_area = get_zone_area(biggest_clearable_zone);
         int elapsed_clocks = clock() - start_clocks;
 
-        fprintf(fp, "%d,%d,%d,",
+        fprintf(fp, "%d, %d,%d, ",
             mine_count-current_capacity,
             correct_area,
             elapsed_clocks
@@ -71,6 +73,7 @@ void experiment_run(int width, int height, int mine_count, char* folder) {
     // write clocks per second
     fprintf(fp, "CLOCKS_PER_SEC: %d,\n", CLOCKS_PER_SEC);
     fprintf(fp, "total_seconds_elapsed: %d,\n", time_elapsed);
+    fprintf(fp, "start_mine_count: %d,\n", mine_count);
     fclose(fp);
     free_minefield(field);
 }
