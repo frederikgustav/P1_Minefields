@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <time.h>
-#include "minefield_algorithms.h"
+#include "../src/minefield_algorithms/minefield_algorithms.h"
 
 void test_get_empty_minefield();
 void test_get_random_minefield();

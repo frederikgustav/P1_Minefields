@@ -1,0 +1,1 @@
+void run_comparison_experiment(int width, int height, int mine_count);
