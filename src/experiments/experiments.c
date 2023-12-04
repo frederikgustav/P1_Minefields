@@ -13,10 +13,11 @@ char* get_new_log_folder();
 void mulitiple_experiment_runs(int width, int height, int mine_count, int runs) {
     char* folder = get_new_log_folder();
 
-    for (int i = 0; i < runs; ++i) {
+    for (int i = 1; i <= runs; ++i) {
         printf("Doing run_%d\n", i);
         experiment_run(width, height, mine_count, folder);
     }
+    free(folder);
 }
 
 void experiment_run(int width, int height, int mine_count, char* folder) {
@@ -27,7 +28,6 @@ void experiment_run(int width, int height, int mine_count, char* folder) {
     fprintf(fp, "remaining_mines, Area, Clocks, Area percentage, Clocks, Area percentage, Clocks\n");
 
     minefield field = get_random_minefield(width, height, mine_count);
-    print_minefield(field);
 
     int start_experiment_clocks = clock();
     for (int current_capacity = 1; current_capacity <= mine_removal_capacity; ++current_capacity) {
@@ -72,6 +72,7 @@ void experiment_run(int width, int height, int mine_count, char* folder) {
     fprintf(fp, "CLOCKS_PER_SEC: %d,\n", CLOCKS_PER_SEC);
     fprintf(fp, "total_seconds_elapsed: %d,\n", time_elapsed);
     fclose(fp);
+    free_minefield(field);
 }
 
 double percent_error(double expected, double actual) {

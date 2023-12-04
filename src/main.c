@@ -8,7 +8,7 @@ int main(void) {
     // begin experiment
     srand(time(NULL));
 
-    mulitiple_experiment_runs(10, 10, 10, 10);
+    mulitiple_experiment_runs(10, 10, 15, 10);
 
     return EXIT_SUCCESS;
 }
