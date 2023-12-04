@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "minefield_algorithms.h"
 
 /**
@@ -90,6 +89,8 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
         } else {
             return 0;
         }
+    } else if (!minefield_is_possibly_valid(field, final_mine_count, x, y)) {
+        return 0;
     } else if (field.matrix[y][x].mine != 1) {
         index++;
         return check_minefield_permutations(field, best_zone, index, final_mine_count);
@@ -102,6 +103,26 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
 
         return result;
     }
+}
+
+/**
+ * Checks if a minefield is possibly valid, by comparing the current mine count to the final mine count
+ * @param field the minefield
+ * @param final_mine_count the amount of mines in the minefield
+ * @param max_x the maximum x value
+ * @param max_y the maximum y value
+ * @return 1 if possibly valid, 0 if not
+ */
+int minefield_is_possibly_valid(minefield field, int final_mine_count, int max_x, int max_y) {
+    int mine_count = 0;
+    for (int y = 0; y < max_y; ++y) {
+        for (int x = 0; x < max_x; ++x) {
+            if (field.matrix[y][x].mine == 1) {
+                mine_count++;
+            }
+        }
+    }
+    return mine_count <= final_mine_count;
 }
 
 /**
@@ -207,4 +228,17 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
         }
     }
     return current_zone;
+}
+
+/**
+ * Expands the zone from the center using expansion zoning
+ * @param field the minefield
+ * @param mine_capacity the amount of mines that can be cleared
+ * @return the best approximate zone
+ */
+zone center_expansion(minefield field, int mine_capacity) {
+    point mid = {field.width / 2, field.height / 2};
+    zone current_zone = {mid, mid};
+
+    return expansion_zoning(field, mine_capacity, current_zone);
 }

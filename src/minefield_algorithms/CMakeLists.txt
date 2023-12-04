@@ -1,0 +1,5 @@
+add_library(minefield_algorithms minefield_algorithms.c minefield_algorithms.h)
+
+target_include_directories(minefield_algorithms PUBLIC .)
+
+target_link_libraries(minefield_algorithms minefields)
