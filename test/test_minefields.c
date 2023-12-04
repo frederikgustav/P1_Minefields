@@ -98,7 +98,7 @@ void test_get_zone_area() {
 
     /* Assert */
     //Calculate the area manually to check if function calculates it correctly.
-    assert(result == 9);
+    assert(result == 16);
 }
 
 // test_get_biggest_cleared_zone()

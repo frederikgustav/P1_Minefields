@@ -1,3 +1,6 @@
+# Misc
+src/experiments_output/*.txt
+
 # Prerequisites
 *.d
 
