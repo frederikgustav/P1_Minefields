@@ -1,3 +1,6 @@
+# Ignore experiment_* directories
+experiment_*
+
 # Prerequisites
 *.d
 
