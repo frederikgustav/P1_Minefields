@@ -160,6 +160,8 @@ void test_get_biggest_cleared_zone() {
 
 
 void test_get_biggest_clearable_zone() {
+    printf("Testing get_biggest_clearable_zone:\n\n");
+
     /* Arrange */
     //Variables for Act
     int width = 5;
@@ -181,7 +183,7 @@ void test_get_biggest_clearable_zone() {
     printf("Minefield to test:\n");
     print_minefield(field);
 
-    printf("Predicted zone if one mine can be cleared\n");
+    printf("Predicted zone if one mine can be cleared:\n");
     print_minefield_zone(field, assert_zone);
 
     /* Act */
@@ -192,6 +194,8 @@ void test_get_biggest_clearable_zone() {
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
+
+    printf("Test get_biggest_clearable_zone success!\n");
 }
 
 
