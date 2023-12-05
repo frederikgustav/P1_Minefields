@@ -54,6 +54,7 @@ zone get_biggest_cleared_zone(minefield field) {
  * @return biggest clearable zone
  */
 zone get_biggest_clearable_zone(minefield field, int mine_removal_capacity) {
+    // Initialize biggest_clearable_zone to the biggest cleared zone without removing any mines
     zone biggest_clearable_zone = get_biggest_cleared_zone(field);
     int final_mine_count = get_minefield_sum(field) - mine_removal_capacity;
     check_minefield_permutations(field, &biggest_clearable_zone, 0, final_mine_count);
@@ -75,6 +76,7 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
     int y = index / field.width;
 
     if (index == field.height * field.width) {
+        // If the current permutation is valid, check if it is better than the current best zone
         if (get_minefield_sum(field) == final_mine_count) {
             zone biggest_cleared_zone = get_biggest_cleared_zone(field);
             int best_clearable_zone_area = get_zone_area(*best_zone);
@@ -90,11 +92,14 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
             return 0;
         }
     } else if (!minefield_permutation_possibly_valid(field, final_mine_count, x, y)) {
+        // If the current permutation cant be valid, stop searching in this branch
         return 0;
     } else if (field.matrix[y][x].mine != 1) {
+        // If the current position is not a mine, continue to next index
         index++;
         return check_minefield_permutations(field, best_zone, index, final_mine_count);
     } else {
+        // If the current position is a mine, check both permutations with and without the mine
         index++;
         result += check_minefield_permutations(field, best_zone, index, final_mine_count);
         field.matrix[y][x].mine = 0;
@@ -145,6 +150,7 @@ zone quick_clear(minefield field, int mine_capacity) {
  * @return the best approximate zone
  */
 zone binary_zoning(minefield field, int mine_capacity) {
+    // Initialize current_zone to the whole minefield
     zone current_zone = {{0,0}, {field.width - 1, field.height - 1}};
     while (mine_capacity < get_zone_mine_sum(field, current_zone)) {
         int height = get_zone_height(current_zone);
@@ -153,6 +159,7 @@ zone binary_zoning(minefield field, int mine_capacity) {
         zone zone_1 = current_zone;
         zone zone_2 = current_zone;
 
+        // divide the zone in half based on the longest side
         if (height > width) {
             int midY = (current_zone.start.y + current_zone.end.y) / 2;
             zone_1.end.y = midY;
@@ -239,6 +246,7 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
  * @return the best approximate zone
  */
 zone center_expansion(minefield field, int mine_capacity) {
+    // Approximate the center of the minefield
     point mid = {field.width / 2, field.height / 2};
     zone current_zone = {mid, mid};
     zone best_zone = expansion_zoning(field, mine_capacity, current_zone);
