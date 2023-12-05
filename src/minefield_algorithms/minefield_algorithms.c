@@ -3,29 +3,37 @@
 
 /**
  * Gives biggest cleared zone in a minefield
- * @param field the minefield to check for largest cleared zone
+ * @param max_zone and coordinate variables max_left , right , top , bottom)
+ * keeps track of size and coordinates of rectangle
+ * @param field.matrix[y][x].mine determines if cell contains a mine
+ * @param int y loops over rows in minefield
+ * @param int x loops over columns in minefield
+ * @param minHeight holds current potential rectangle
+ * @param int_zone determines width of rectangle
+ * @param max_zone = zone updates coordinates of biggest rectangle
+ * @param zone biggest_rect sets start_point and end_point of rectangle
  * @return biggest cleared zone
  */
 zone get_biggest_cleared_zone(minefield field) {
     int max_zone = 0;
     int max_left = 0, max_right = 0, max_top = 0, max_bottom = 0;
-    int height[field.height][field.width];
+    int matrix[field.height][field.width];
 
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
             if (field.matrix[y][x].mine == 1) {
-                height[y][x] = 0;
+                matrix[y][x] = 0;
             } else {
-                height[y][x] = (y == 0) ? 1 : height[y - 1][x] + 1;
+                matrix[y][x] = (y == 0) ? 1 : matrix[y - 1][x] + 1;
             }
         }
     }
 
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
-            int minHeight = height[y][x];
+            int minHeight = matrix[y][x];
             for (int k = x; k >= 0; --k) {
-                minHeight = minHeight < height[y][k] ? minHeight : height[y][k];
+                minHeight = minHeight < matrix[y][k] ? minHeight : matrix[y][k];
                 int zone = minHeight * (x - k + 1);
                 if (zone > max_zone) {
                     max_zone = zone;
