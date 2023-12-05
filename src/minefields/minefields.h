@@ -40,5 +40,8 @@ void free_minefield(minefield field);
 int get_minefield_sum(struct minefield field);
 int get_zone_area(zone zone);
 int get_zone_mine_sum(minefield field, zone zone);
+int get_zone_height(zone zone);
+int get_zone_width(zone zone);
+double get_zone_mine_density(minefield field, zone zone);
 
 int is_valid_zone(minefield field, zone zone);

@@ -175,3 +175,31 @@ int is_valid_zone(minefield field, zone zone) {
     return zone.start.x >= 0 && zone.start.y >= 0 &&
            zone.end.x < field.width && zone.end.y < field.height;
 }
+
+/**
+ * Gives height of a zone
+ * @param zone zone to get height of
+ * @return the height
+ */
+int get_zone_height(zone zone) {
+    return zone.end.y - zone.start.y + 1;
+}
+
+/**
+ * Gives width of a zone
+ * @param zone zone to get width of
+ * @return the width
+ */
+int get_zone_width(zone zone) {
+    return zone.end.x - zone.start.x + 1;
+}
+
+/**
+ * Gives the density of a zone
+ * @param field the minefield to check
+ * @param zone the zone to check
+ * @return the density of the zone
+ */
+double get_zone_mine_density(minefield field, zone zone) {
+    return (double) get_zone_mine_sum(field, zone) / get_zone_area(zone);
+}

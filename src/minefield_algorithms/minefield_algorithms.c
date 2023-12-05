@@ -138,7 +138,7 @@ zone quick_clear(minefield field, int mine_capacity) {
 }
 
 /**
- * Divides the minefield into 4 zones until the mine capacity is reached
+ * Divides the minefield into 2 zones until the mine capacity is reached
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
  * @param current_zone the zone to start with
@@ -147,29 +147,34 @@ zone quick_clear(minefield field, int mine_capacity) {
 zone binary_zoning(minefield field, int mine_capacity) {
     zone current_zone = {{0,0}, {field.width - 1, field.height - 1}};
     while (mine_capacity < get_zone_mine_sum(field, current_zone)) {
-        int midX = (current_zone.start.x + current_zone.end.x) / 2;
-        int midY = (current_zone.start.y + current_zone.end.y) / 2;
+        int height = get_zone_height(current_zone);
+        int width = get_zone_width(current_zone);
 
-        zone up_r = {current_zone.start, {midX, midY}};
-        zone low_r = {{current_zone.start.x, midY + 1},{midX,current_zone.end.y}};
-        zone up_l = {{midX + 1, current_zone.start.y},{current_zone.end.x, midY}};
-        zone low_l = {{midX + 1, midY + 1}, current_zone.end};
+        zone zone_1 = current_zone;
+        zone zone_2 = current_zone;
 
-        // find the zone with the least mines
-        int up_r_count = get_zone_mine_sum(field, up_r);
-        int low_r_count = get_zone_mine_sum(field, low_r);
-        int up_l_count = get_zone_mine_sum(field, up_l);
-        int low_l_count = get_zone_mine_sum(field, low_l);
-
-        // select lowest count zone
-        if (up_r_count <= low_r_count && up_r_count <= up_l_count && up_r_count <= low_l_count) {
-            current_zone = up_r;
-        } else if (low_r_count <= up_r_count && low_r_count <= up_l_count && low_r_count <= low_l_count) {
-            current_zone = low_r;
-        } else if (up_l_count <= up_r_count && up_l_count <= low_r_count && up_l_count <= low_l_count) {
-            current_zone = up_l;
+        if (height > width) {
+            int midY = (current_zone.start.y + current_zone.end.y) / 2;
+            zone_1.end.y = midY;
+            zone_2.start.y = midY + 1;
         } else {
-            current_zone = low_l;
+            int midX = (current_zone.start.x + current_zone.end.x) / 2;
+            zone_1.end.x = midX;
+            zone_2.start.x = midX + 1;
+        }
+
+        print_minefield_zone(field, zone_1);
+        print_minefield_zone(field, zone_2);
+
+        // find the zone with lowest mine density
+        double zone_1_density = get_zone_mine_density(field, zone_1);
+        double zone_2_density = get_zone_mine_density(field, zone_2);
+
+        // select lowest density zone
+        if (zone_1_density <= zone_2_density) {
+            current_zone = zone_1;
+        } else {
+            current_zone = zone_2;
         }
     }
     return current_zone;
@@ -239,6 +244,7 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
 zone center_expansion(minefield field, int mine_capacity) {
     point mid = {field.width / 2, field.height / 2};
     zone current_zone = {mid, mid};
+    zone best_zone = expansion_zoning(field, mine_capacity, current_zone);
 
-    return expansion_zoning(field, mine_capacity, current_zone);
+    return best_zone;
 }
