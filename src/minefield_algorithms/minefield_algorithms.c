@@ -2,17 +2,9 @@
 #include "minefield_algorithms.h"
 
 /**
- * Gives biggest cleared zone in a minefield
- * @param max_zone and coordinate variables max_left , right , top , bottom)
- * keeps track of size and coordinates of rectangle
- * @param field.matrix[y][x].mine determines if cell contains a mine
- * @param int y loops over rows in minefield
- * @param int x loops over columns in minefield
- * @param minHeight holds current potential rectangle
- * @param int_zone determines width of rectangle
- * @param max_zone = zone updates coordinates of biggest rectangle
- * @param zone biggest_rect sets start_point and end_point of rectangle
- * @return biggest cleared zone
+ * Returns biggest cleared rectangle in a minefield
+ * @param field the minefield to check
+ * @return the biggest cleared rectangle (zone)
  */
 zone get_biggest_cleared_zone(minefield field) {
     int max_zone = 0;
