@@ -178,6 +178,12 @@ void test_get_biggest_clearable_zone() {
     field.matrix[3][3].mine = 1;
     field.matrix[4][4].mine = 1;
 
+    printf("Minefield to test:\n");
+    print_minefield(field);
+
+    printf("Predicted zone if one mine can be cleared\n");
+    print_minefield_zone(field, assert_zone);
+
     /* Act */
     test_zone = get_biggest_clearable_zone(field, mine_removal_capacity);
 
@@ -186,8 +192,6 @@ void test_get_biggest_clearable_zone() {
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
-
-    printf("suces");
 }
 
 
