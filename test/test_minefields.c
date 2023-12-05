@@ -11,6 +11,7 @@ void test_get_zone_area();
 void test_get_minefield_sum();
 void test_get_biggest_cleared_zone();
 void test_get_biggest_clearable_zone();
+void test_binary_zoning();
 
 int main(void) {
     // Seed random generator
@@ -23,6 +24,7 @@ int main(void) {
     test_get_minefield_sum();
     test_get_biggest_cleared_zone();
     test_get_biggest_clearable_zone();
+    test_binary_zoning();
 
     return EXIT_SUCCESS;
 }
@@ -202,9 +204,47 @@ void test_get_biggest_clearable_zone() {
     /* Assert */
     assert(assert_zone_area == test_zone_area);
 
-    printf("Test get_biggest_clearable_zone: success!\n");
+    printf("Test get_biggest_clearable_zone: success!\n\n");
 }
 
 void test_binary_zoning() {
+    printf("Testing binary_zoning:\n");
+
+    /* Arrange */
+    //Variables for Act
+    int width = 5;
+    int height = 5;
+    minefield field = get_empty_minefield(width, height);
+    int mine_removal_capacity = 1;
+    int assert_zone_area;
+    int test_zone_area;
+
+    zone assert_zone =  {{0, 0}, {2, 2}};
+    zone test_zone;
+
+    // Place mines at specific positions for act test
+    field.matrix[0][0].mine = 1;
+    field.matrix[3][1].mine = 1;
+    field.matrix[3][3].mine = 1;
+    field.matrix[4][4].mine = 1;
+
+    printf("Minefield to test:\n");
+    print_minefield(field);
+
+    printf("Predicted zone if 1 mine can be cleared:\n");
+    print_minefield_zone(field, assert_zone);
+
+    /* Act */
+    test_zone = binary_zoning(field, mine_removal_capacity);
+
+    printf("Test binary_zoning: success!");
+
+    test_zone_area = get_zone_area(test_zone);
+    assert_zone_area = get_zone_area(assert_zone);
+
+
+
+    /* Assert */
+    assert(assert_zone_area == test_zone_area);
 
 }
