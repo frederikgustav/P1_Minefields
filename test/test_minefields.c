@@ -131,6 +131,7 @@ void test_get_minefield_sum() {
 }
 
 void test_get_biggest_cleared_zone() {
+    printf("Testing get_biggest_cleared_zone:\n");
     /* Arrange */
     //Variables for Act
     int width = 5;
@@ -148,6 +149,12 @@ void test_get_biggest_cleared_zone() {
     field.matrix[3][3].mine = 1;
     field.matrix[4][4].mine = 1;
 
+    printf("Minefield to test:\n");
+    print_minefield(field);
+
+    printf("Predicted zone:\n");
+    print_minefield_zone(field, assert_zone);
+
     /* Act */
     test_zone = get_biggest_cleared_zone(field);
 
@@ -156,11 +163,11 @@ void test_get_biggest_cleared_zone() {
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
+    printf("Test get_biggest_cleared_zone: success!\n\n");
 }
 
-
 void test_get_biggest_clearable_zone() {
-    printf("Testing get_biggest_clearable_zone:\n\n");
+    printf("Testing get_biggest_clearable_zone:\n");
 
     /* Arrange */
     //Variables for Act
@@ -195,9 +202,8 @@ void test_get_biggest_clearable_zone() {
     /* Assert */
     assert(assert_zone_area == test_zone_area);
 
-    printf("Test get_biggest_clearable_zone success!\n");
+    printf("Test get_biggest_clearable_zone: success!\n");
 }
-
 
 void test_binary_zoning() {
 

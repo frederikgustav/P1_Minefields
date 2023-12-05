@@ -163,9 +163,6 @@ zone binary_zoning(minefield field, int mine_capacity) {
             zone_2.start.x = midX + 1;
         }
 
-        print_minefield_zone(field, zone_1);
-        print_minefield_zone(field, zone_2);
-
         // find the zone with lowest mine density
         double zone_1_density = get_zone_mine_density(field, zone_1);
         double zone_2_density = get_zone_mine_density(field, zone_2);
