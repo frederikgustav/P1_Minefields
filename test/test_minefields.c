@@ -246,7 +246,6 @@ void test_binary_zoning() {
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
-
 }
 
 // test_get_zone_mine_density()
