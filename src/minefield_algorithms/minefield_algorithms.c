@@ -249,13 +249,13 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
             }
         }
 
-        if (left_density != 2 && left_density < right_density && left_density < up_density && left_density < down_density) {
+        if (left_density != 2 && left_density <= right_density && left_density <= up_density && left_density <= down_density) {
             current_zone = left;
-        } else if (right_density != 2 && right_density < left_density && right_density < up_density && right_density < down_density) {
+        } else if (right_density != 2 && right_density <= left_density && right_density <= up_density && right_density <= down_density) {
             current_zone = right;
-        } else if (up_density != 2 && up_density < left_density && up_density < right_density && up_density < down_density) {
+        } else if (up_density != 2 && up_density <= left_density && up_density <= right_density && up_density <= down_density) {
             current_zone = up;
-        } else if (down_density != 2 && down_density < left_density && down_density < right_density && down_density < up_density) {
+        } else if (down_density != 2 && down_density <= left_density && down_density <= right_density && down_density <= up_density) {
             current_zone = down;
         } else {
             break;
