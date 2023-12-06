@@ -23,7 +23,7 @@ typedef struct minefield {
 } minefield;
 
 /*
- * Represents a
+ * Represents a zone in a minefield, with a start and end point.
  */
 typedef struct zone {
     point start;

@@ -91,15 +91,15 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
         } else {
             return 0;
         }
-    } else if (!minefield_permutation_possibly_valid(field, final_mine_count, x, y)) {
-        // If the current permutation cant be valid, stop searching in this branch
-        return 0;
     } else if (field.matrix[y][x].mine != 1) {
         // If the current position is not a mine, continue to next index
         index++;
         return check_minefield_permutations(field, best_zone, index, final_mine_count);
+    } else if (!minefield_permutation_possibly_valid(field, final_mine_count, x, y)) {
+        // If the current permutation cant be valid, stop searching in this branch
+        return 0;
     } else {
-        // If the current position is a mine, check both permutations with and without the mine
+        // The current position is a mine, check both permutations with and without the mine
         index++;
         result += check_minefield_permutations(field, best_zone, index, final_mine_count);
         field.matrix[y][x].mine = 0;
@@ -120,14 +120,39 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
  */
 int minefield_permutation_possibly_valid(minefield field, int final_mine_count, int max_x, int max_y) {
     int mine_count = 0;
-    for (int y = 0; y < max_y; ++y) {
-        for (int x = 0; x < max_x; ++x) {
-            if (field.matrix[y][x].mine == 1) {
+    //printf("max_x: %d, max_y: %d\n", max_x, max_y);
+    for (int y = 0; y <= max_y; ++y) {
+        for (int x = 0; x < field.width; ++x) {
+            //printf("checked %d, %d\n", x, y);
+            if (x >= max_x && y == max_y) {
+                continue;
+            } else if (field.matrix[y][x].mine == 1) {
+                //printf("counted mine at %d, %d\n", x, y);
                 mine_count++;
+            } else {
+                //printf("not counted mine at %d, %d\n", x, y);
             }
         }
     }
-    return mine_count <= final_mine_count;
+    int not_too_many_mines = mine_count <= final_mine_count;
+
+    //printf("began here\n");
+    int remaining_mines = 0;
+    for (int y = max_y; y < field.height; ++y) {
+        for (int x = 0; x < field.width; ++x) {
+            if (y == max_y && x < max_x) {
+                continue;
+            } else if (field.matrix[y][x].mine == 1) {
+                //printf("counted mine at %d, %d\n", x, y);
+                remaining_mines++;
+            } else {
+                //printf("not counted mine at %d, %d\n", x, y);
+            }
+        }
+    }
+
+    int not_too_few_mines = !((remaining_mines + mine_count) < final_mine_count);
+    return not_too_many_mines && not_too_few_mines;
 }
 
 /**
