@@ -27,7 +27,7 @@ int main(void) {
         printf("Enter number of runs:\n");
         scanf("%d", &runs);
 
-        mulitiple_experiment_runs(width, height, mine_count, runs);
+        multiple_experiment_runs(width, height, mine_count, runs, 1, 1, 1000);
     }
 
     return EXIT_SUCCESS;
