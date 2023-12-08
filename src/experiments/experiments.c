@@ -40,46 +40,46 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     // write final file
     FILE* final_file = get_new_log_file(folder, 1);
     fprintf(final_file, "General info, Bruteforce, , Quick Clear, , Center expansion, \n");
-    fprintf(final_file, "Remaining mines, Area, Clocks, Area, Clocks, Area, Clocks \n");
+    fprintf(final_file, "Remaining mines, Area, Seconds, Area, Seconds, Area, Seconds \n");
 
     // calculate averages and write them to final file
     for (int current_capacity = 1; current_capacity <= mine_count-1; current_capacity = current_capacity + interval) {
         double total_correct_area = 0;
-        double total_correct_clocks = 0;
+        double total_correct_seconds = 0;
         double total_new_area = 0;
-        double total_new_clocks = 0;
+        int total_new_seconds = 0;
         double total_new_area2 = 0;
-        double total_new_clocks2 = 0;
+        int total_new_seconds2 = 0;
 
         for (int i = 0; i < runs; ++i) {
-            int correct_area, correct_clocks, new_clocks, new_clocks2;
-            double new_area, new_area2;
+            int correct_area, new_seconds;
+            double new_area, new_area2, correct_seconds, new_seconds2;
             // scan values, throw away first value
-            fscanf(run_files[i], "%*d, %d,%d, %lf,%d, %lf,%d\n",
+            fscanf(run_files[i], "%*d, %d,%lf, %lf,%d, %lf,%lf\n",
                 &correct_area,
-                &correct_clocks,
+                &correct_seconds,
                 &new_area,
-                &new_clocks,
+                &new_seconds,
                 &new_area2,
-                &new_clocks2
+                &new_seconds2
             );
 
             total_correct_area += correct_area;
-            total_correct_clocks += correct_clocks;
+            total_correct_seconds += correct_seconds;
             total_new_area += new_area;
-            total_new_clocks += new_clocks;
+            total_new_seconds += new_seconds;
             total_new_area2 += new_area2;
-            total_new_clocks2 += new_clocks2;
+            total_new_seconds2 += new_seconds2;
 
         }
 
         // calculate averages
         double avg_correct_area = total_correct_area / runs;
-        double avg_correct_clocks = total_correct_clocks / runs;
+        double avg_correct_clocks = (((double) total_correct_seconds / runs) / CLOCKS_PER_SEC);
         double avg_new_area = total_new_area / runs;
-        double avg_new_clocks = total_new_clocks / runs;
+        double avg_new_seconds = (((double) total_new_seconds / runs) / CLOCKS_PER_SEC);
         double avg_new_area2 = total_new_area2 / runs;
-        double avg_new_clocks2 = total_new_clocks2 / runs;
+        double avg_new_seconds2 = (((double) total_new_seconds / runs) / CLOCKS_PER_SEC);
 
         // print averages to final file
         fprintf(final_file, "%d, %f,%f, %f,%f, %f,%f\n",
@@ -87,9 +87,9 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
             avg_correct_area,
             avg_correct_clocks,
             avg_new_area,
-            avg_new_clocks,
+            avg_new_seconds,
             avg_new_area2,
-            avg_new_clocks2
+            avg_new_seconds2
         );
     }
 
@@ -98,7 +98,6 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     if (logging) printf("Completed in a total of %d seconds.\n", end_experiment_time);
 
     // print general info
-    fprintf(final_file, "CLOCKS_PER_SEC: %d,\n", CLOCKS_PER_SEC);
     fprintf(final_file, "total_seconds_elapsed: %d,\n", end_experiment_time);
     fprintf(final_file, "start_mine_count: %d,\n", mine_count);
     fprintf(final_file, "minefield_size: %dx%d,\n", width, height);
@@ -168,7 +167,6 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
     int time_elapsed = (end_experiment_clocks - start_experiment_clocks) / CLOCKS_PER_SEC;
 
     // write clocks per second
-    fprintf(fp, "CLOCKS_PER_SEC: %d,\n", CLOCKS_PER_SEC);
     fprintf(fp, "total_seconds_elapsed: %d,\n", time_elapsed);
     fprintf(fp, "start_mine_count: %d,\n", mine_count);
     free_minefield(field);
