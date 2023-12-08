@@ -9,7 +9,6 @@
 
 struct stat st = {0};
 
-double percent_error(double expected, double actual);
 FILE* get_new_log_file(char* folder, int final);
 FILE* experiment_run(int width, int height, int mine_count, char* folder, int without_brute_force, int logging, int interval);
 char* get_new_log_folder();
