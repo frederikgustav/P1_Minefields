@@ -14,6 +14,8 @@ void test_get_biggest_clearable_zone();
 void test_binary_zoning_case_1();
 void test_binary_zoning_case_2();
 void test_is_valid_zone();
+void test_get_zone_height();
+void test_get_zone_width();
 
 int main(void) {
     // Seed random generator
@@ -29,6 +31,8 @@ int main(void) {
     test_binary_zoning_case_1();
     test_binary_zoning_case_2();
     test_is_valid_zone();
+    test_get_zone_height();
+    test_get_zone_width();
 
     return EXIT_SUCCESS;
 }
@@ -365,6 +369,31 @@ void test_is_valid_zone() {
 }
 
 // test_get_zone_mine_density()
-// test_get_zone_height()
-// test_get_zone_width()
 
+void test_get_zone_height() {
+    printf("Testing get_zone_height:\n");
+
+    /* Arrange */
+    zone test_zone = {{1, 2}, {3, 5}};
+
+    /* Act */
+    int result = get_zone_height(test_zone);
+
+    /* Assert */
+    assert(result == 4);
+    printf("Test get_zone_height: success!\n");
+}
+
+void test_get_zone_width() {
+    printf("Testing get_zone_width:\n");
+
+    /* Arrange */
+    zone test_zone = {{1, 2}, {3, 5}};
+
+    /* Act */
+    int result = get_zone_width(test_zone);
+
+    /* Assert */
+    assert(result == 4);
+    printf("Test get_zone_width: success!\n");
+}
