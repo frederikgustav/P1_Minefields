@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <time.h>
 #include "../src/minefield_algorithms/minefield_algorithms.h"
+#define TOLERANCE 0.0001
 
 void test_get_empty_minefield();
 void test_get_random_minefield();
@@ -16,6 +17,7 @@ void test_binary_zoning_case_2();
 void test_is_valid_zone();
 void test_get_zone_height();
 void test_get_zone_width();
+void test_get_zone_mine_density();
 
 int main(void) {
     // Seed random generator
@@ -33,6 +35,7 @@ int main(void) {
     test_is_valid_zone();
     test_get_zone_height();
     test_get_zone_width();
+    test_get_zone_mine_density();
 
     return EXIT_SUCCESS;
 }
@@ -368,7 +371,7 @@ void test_is_valid_zone() {
     printf("Test is_valid_zone: success!\n");
 }
 
-// test_get_zone_mine_density()
+
 
 void test_get_zone_height() {
     printf("Testing get_zone_height:\n");
@@ -394,6 +397,33 @@ void test_get_zone_width() {
     int result = get_zone_width(test_zone);
 
     /* Assert */
-    assert(result == 4);
+    assert(result == 3);
     printf("Test get_zone_width: success!\n");
 }
+
+
+void test_get_zone_mine_density() {
+    printf("Testing get_zone_mine_density:\n");
+
+    /* Arrange */
+    minefield field = get_empty_minefield(3, 3);
+    field.matrix[0][0].mine = 1;
+    field.matrix[1][1].mine = 1;
+    field.matrix[2][2].mine = 1;
+
+    zone test_zone = {{0, 0}, {2, 2}};
+
+    /* Act */
+    double result = get_zone_mine_density(field, test_zone);
+
+    /* Assert */
+    // In this case, there are 3 mines in a zone of size 3x3, so the expected density is 3/9 = 1/3
+    double expected_density = 1.0 / 3.0;
+    double diff = result - expected_density;
+
+    // Compare the actual and expected results with a small tolerance
+    assert(-TOLERANCE < diff && diff < TOLERANCE);
+
+    printf("Test get_zone_mine_density: success!\n");
+}
+
