@@ -14,7 +14,8 @@ void test_get_biggest_cleared_zone();
 void test_get_biggest_clearable_zone();
 void test_binary_zoning_case_1();
 void test_binary_zoning_case_2();
-void test_is_valid_zone();
+void test_is_valid_zone_case_1();
+void test_is_valid_zone_case_2();
 void test_get_zone_height();
 void test_get_zone_width();
 void test_get_zone_mine_density();
@@ -32,7 +33,8 @@ int main(void) {
     test_get_biggest_clearable_zone();
     test_binary_zoning_case_1();
     test_binary_zoning_case_2();
-    test_is_valid_zone();
+    test_is_valid_zone_case_1();
+    test_is_valid_zone_case_2();
     test_get_zone_height();
     test_get_zone_width();
     test_get_zone_mine_density();
@@ -41,10 +43,7 @@ int main(void) {
 }
 
 /**
- * Test of function that gives empty minefield
- * @param
- * @param
- * @return
+ * Confirms there aren't any mines in a given empty minefield
  */
 void test_get_empty_minefield() {
     /* Arrange */
@@ -64,10 +63,7 @@ void test_get_empty_minefield() {
     }
 }
 /**
- * Test of function that gives random minefield with mines
- * @param
- * @param
- * @return
+ * Tests that the amount of mines in a random minefield is correct
  */
 void test_get_random_minefield() {
     /* Arrange */
@@ -95,10 +91,7 @@ void test_get_random_minefield() {
 }
 
 /**
- * Test of function that counts the sum of mines in zone
- * @param
- * @param
- * @return
+ * Tests that function that counts the sum of mines in zone of a minefield is correct
  */
 void test_get_zone_mine_sum() {
     /* Arrange */
@@ -125,10 +118,7 @@ void test_get_zone_mine_sum() {
 }
 
 /**
- * Test of function that gets the area of zone in minefield
- * @param
- * @param
- * @return
+ * Test othat function that gets the area of zone in minefield is correct
  */
 void test_get_zone_area() {
     /* Arrange */
@@ -144,12 +134,8 @@ void test_get_zone_area() {
 }
 
 /**
- * Test of function that gets the sum of mines in minefield
- * @param
- * @param
- * @return
+ * Tests that function that gets the sum of mines in a whole minefield is correct
  */
-
 void test_get_minefield_sum() {
     /* Arrange */
     //Variables for Act
@@ -170,10 +156,7 @@ void test_get_minefield_sum() {
 }
 
 /**
- * Test of function that gives the zone in an minefield that has the least amount of mines (biggest cleared)
- * @param
- * @param
- * @return
+ * Confirms that the zone with the biggest cleared area is found
  */
 void test_get_biggest_cleared_zone() {
     printf("Testing get_biggest_cleared_zone:\n");
@@ -212,10 +195,7 @@ void test_get_biggest_cleared_zone() {
 }
 
 /**
- * Test of function that gives a zone in minefield that will give biggest cleared when clearing mines
- * @param
- * @param
- * @return
+ * Test of function that gives a zone in minefield that will give biggest cleared when clearing x amount of mines
  */
 void test_get_biggest_clearable_zone() {
     printf("Testing get_biggest_clearable_zone:\n");
@@ -256,10 +236,8 @@ void test_get_biggest_clearable_zone() {
     printf("Test get_biggest_clearable_zone: success!\n\n");
 }
 /**
- * Test of function that uses binary algorithm on minefield to create zone that is best to clear
- * @param
- * @param
- * @return
+ * Test of function that uses binary algorithm on minefield to create zone that is approximately
+ * the best start zone for clearing mines
  */
 void test_binary_zoning_case_1() {
     printf("Testing binary_zoning case 1:\n");
@@ -335,8 +313,6 @@ void test_binary_zoning_case_2() {
 
     /* Act */
     test_zone = binary_zoning(field, mine_removal_capacity);
-    printf("Test zone results:\n");
-    print_minefield_zone(field, test_zone);
 
     test_zone_area = get_zone_area(test_zone);
     assert_zone_area = get_zone_area(assert_zone);
@@ -348,12 +324,9 @@ void test_binary_zoning_case_2() {
 }
 
 /**
- * Test of function that checks if the zone is valid
- * @param
- * @param
- * @return
+ * Test of function that checks if the zone is valid (not out of bounds)
  */
-void test_is_valid_zone() {
+void test_is_valid_zone_case_1() {
     /* Arrange */
     //Variables for Act
     int width = 5;
@@ -365,16 +338,28 @@ void test_is_valid_zone() {
     int result = is_valid_zone(field, test_zone);
 
     /* Assert */
-    //Calculate the area manually to check if function calculates it correctly.
-    assert(result == is_valid_zone(field, test_zone));
-
-    printf("Test is_valid_zone: success!\n");
+    assert(result); // Zone is valid
 }
 
+void test_is_valid_zone_case_2() {
+    /* Arrange */
+    //Variables for Act
+    int width = 5;
+    int height = 5;
+    minefield field = get_empty_minefield(width, height);
+    zone test_zone = {{-1, -1}, {4, 4}};
 
+    /* Act */
+    int result = is_valid_zone(field, test_zone);
 
+    /* Assert */
+    assert(!result); // Zone is not valid
+}
+
+/**
+ * Test of function that gets the height of a zone
+ */
 void test_get_zone_height() {
-    printf("Testing get_zone_height:\n");
 
     /* Arrange */
     zone test_zone = {{1, 2}, {3, 5}};
@@ -384,11 +369,12 @@ void test_get_zone_height() {
 
     /* Assert */
     assert(result == 4);
-    printf("Test get_zone_height: success!\n");
 }
 
+/**
+ * Test of function that gets the width of a zone
+ */
 void test_get_zone_width() {
-    printf("Testing get_zone_width:\n");
 
     /* Arrange */
     zone test_zone = {{1, 2}, {3, 5}};
@@ -398,13 +384,12 @@ void test_get_zone_width() {
 
     /* Assert */
     assert(result == 3);
-    printf("Test get_zone_width: success!\n");
 }
 
-
+/**
+ * Test of function that gets the density of mines in a zone
+ */
 void test_get_zone_mine_density() {
-    printf("Testing get_zone_mine_density:\n");
-
     /* Arrange */
     minefield field = get_empty_minefield(3, 3);
     field.matrix[0][0].mine = 1;
@@ -423,7 +408,4 @@ void test_get_zone_mine_density() {
 
     // Compare the actual and expected results with a small tolerance
     assert(-TOLERANCE < diff && diff < TOLERANCE);
-
-    printf("Test get_zone_mine_density: success!\n");
 }
-
