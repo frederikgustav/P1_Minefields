@@ -39,7 +39,7 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
 
     // write final file
     FILE* final_file = get_new_log_file(folder, 1);
-    fprintf(final_file, "General info, Bruteforce, , Quick Clear, , Center expansion, \n");
+    fprintf(final_file, "General info, Bruteforce, , Quick Clear, , Random point expansion, \n");
     fprintf(final_file, "Remaining mines, Area, Seconds, Area, Seconds, Area, Seconds \n");
 
     // calculate averages and write them to final file
@@ -113,7 +113,7 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
     int mine_removal_capacity = mine_count-1;
     FILE *fp = get_new_log_file(folder, 0);
 
-    minefield field = get_random_minefield(width, height, mine_count);
+    minefield field = get_random_minefield_with_lower_density_half(width, height, mine_count);
 
     int start_experiment_clocks = clock();
     for (int current_capacity = 1; current_capacity <= mine_removal_capacity; current_capacity = current_capacity + interval) {
@@ -150,7 +150,7 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
         );
 
         start_clocks = clock();
-        biggest_clearable_zone = center_expansion(field, current_capacity);
+        biggest_clearable_zone = random_point_expansion(field, current_capacity);
         new_area = get_zone_area(biggest_clearable_zone);
         elapsed_clocks = clock() - start_clocks;
 

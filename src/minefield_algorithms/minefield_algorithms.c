@@ -1,4 +1,5 @@
-    #include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "minefield_algorithms.h"
 
 /**
@@ -260,15 +261,15 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
 }
 
 /**
- * Expands the zone from the center using expansion zoning
+ * Expands the zone from a random point
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
  * @return the best approximate zone
  */
-zone center_expansion(minefield field, int mine_capacity) {
-    // Approximate the center of the minefield
-    point mid = {field.width / 2, field.height / 2};
-    zone current_zone = {mid, mid};
+zone random_point_expansion(minefield field, int mine_capacity) {
+    point random = {rand() % field.width, rand() % field.height};
+
+    zone current_zone = {random, random};
     zone best_zone = expansion_zoning(field, mine_capacity, current_zone);
 
     return best_zone;

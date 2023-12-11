@@ -59,6 +59,41 @@ minefield get_random_minefield(int width, int height, int mine_amount) {
 }
 
 /**
+ * Gives a minefield with randomly placed mines, but one half of the minefield has a higher probability of having mines
+ * @param width the width of the empty minefield with mines in it
+ * @param height the height of the empty minefield with mines in it
+ * @param mine_amount the amount of mines in the minefields
+ * @return the function returns a minefield with randomly placed mines and a half with a higher probability of having mines
+ */
+minefield get_random_minefield_with_lower_density_half(int width, int height, int mine_amount) {
+    if (mine_amount > width * height) {
+        printf("Error: mine_amount is greater than the amount of squares in the minefield");
+        exit(EXIT_FAILURE);
+    }
+
+    // Random amount mine amount, at most 50 % of the original mine amount, at least 0
+    int random_mine_amount = rand() % (mine_amount / 2 + 1);
+    minefield field = get_random_minefield(width, height, mine_amount - random_mine_amount);
+
+    // Place the rest of the mines in a random half of the minefield
+    for (int i = 0; i < random_mine_amount; ++i) {
+        int random_y = rand() % height;
+        int random_x = rand() % width;
+
+        if (field.matrix[random_y][random_x].mine) {
+            i--;
+            continue;
+        }
+
+        field.matrix[random_y][random_x].mine = 1;
+    }
+
+    print_minefield(field);
+
+    return field;
+}
+
+/**
  * Deallocates memory for a minefields matrix
  * @param field the minefield for which to deallocate memory
  */

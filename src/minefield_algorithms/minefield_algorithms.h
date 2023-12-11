@@ -6,7 +6,7 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
 
 int minefield_permutation_possibly_valid(minefield field, int final_mine_count, int current_x, int current_y);
 
-zone center_expansion(minefield field, int mine_capacity);
+zone random_point_expansion(minefield field, int mine_capacity);
 
 zone quick_clear(minefield field, int mine_capacity);
 zone binary_zoning(minefield field, int mine_capacity);
