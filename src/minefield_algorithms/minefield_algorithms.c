@@ -120,6 +120,7 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
 int minefield_permutation_possibly_valid(minefield field, int final_mine_count, int current_x, int current_y) {
     int mine_count = 0;
 
+    // Count mines up to, and not including, the current position
     for (int y = 0; y <= current_y; ++y) {
         for (int x = 0; x < field.width; ++x) {
             if (x >= current_x && y == current_y) {
@@ -131,6 +132,7 @@ int minefield_permutation_possibly_valid(minefield field, int final_mine_count, 
     }
     int not_too_many_mines = mine_count <= final_mine_count;
 
+    // Count mines after the current position
     int remaining_mines = 0;
     for (int y = current_y; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
@@ -141,8 +143,9 @@ int minefield_permutation_possibly_valid(minefield field, int final_mine_count, 
             }
         }
     }
-
     int not_too_few_mines = (remaining_mines + mine_count) >= final_mine_count;
+
+    // Return 1 if both conditions are met, else return 0, meaning the permutation is not possibly valid
     return not_too_many_mines && not_too_few_mines;
 }
 
@@ -216,12 +219,12 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
         zone down = {{current_zone.start.x, current_zone.start.y}, {current_zone.end.x, current_zone.end.y + 1}};
 
         // if a zone is invalid, set its density to -1, else calculate its density
-        double left_density = is_valid_zone(field, left) ? (double) get_zone_mine_sum(field, left) / get_zone_area(left) : 2;
-        double right_density = is_valid_zone(field, right) ? (double) get_zone_mine_sum(field, right) / get_zone_area(right) : 2;
-        double up_density = is_valid_zone(field, up) ? (double) get_zone_mine_sum(field, up) / get_zone_area(up) : 2;
-        double down_density = is_valid_zone(field, down) ? (double) get_zone_mine_sum(field, down) / get_zone_area(down) : 2;
+        double left_density = is_valid_zone(field, left) ? get_zone_mine_density(field, left) : 2;
+        double right_density = is_valid_zone(field, right) ? get_zone_mine_density(field, right) : 2;
+        double up_density = is_valid_zone(field, up) ? get_zone_mine_density(field, up) : 2;
+        double down_density = is_valid_zone(field, down) ? get_zone_mine_density(field, down) : 2;
 
-        // if zone is valid, meaning not -1, check if there are too many mines in the zone, if so set density to 1
+        // if zone is valid, meaning not 2, check if there are too many mines in the zone, if so set density to 2 (invalid)
         if (left_density != 2) {
             if (get_zone_mine_sum(field, left) > mine_capacity) {
                 left_density = 2;
@@ -240,6 +243,7 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
             }
         }
 
+        // find the zone with lowest mine density that is not 2 (a zone with density 2 is invalid)
         if (left_density != 2 && left_density <= right_density && left_density <= up_density && left_density <= down_density) {
             current_zone = left;
         } else if (right_density != 2 && right_density <= left_density && right_density <= up_density && right_density <= down_density) {
