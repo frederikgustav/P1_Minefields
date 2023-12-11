@@ -88,7 +88,27 @@ minefield get_random_minefield_with_lower_density_half(int width, int height, in
         field.matrix[random_y][random_x].mine = 1;
     }
 
-    print_minefield(field);
+    return field;
+}
+
+minefield get_random_minefield_with_lower_density_zone(int width, int height, int mine_amount) {
+    if (mine_amount > width * height) {
+        printf("Error: mine_amount is greater than the amount of squares in the minefield");
+        exit(EXIT_FAILURE);
+    }
+
+    // Random amount mine amount, at most 50 % of the original mine amount, at least 0
+    int random_mine_amount = rand() % (mine_amount / 2 + 1);
+    minefield field = get_random_minefield(width, height, mine_amount - random_mine_amount);
+
+    zone zone;
+    do {
+        zone.start.x = rand() % width;
+        zone.start.y = rand() % height;
+        zone.end.x = rand() % width;
+        zone.end.y = rand() % height;
+
+    } while (!is_valid_zone(field, zone));
 
     return field;
 }
@@ -201,14 +221,19 @@ int get_zone_area(zone zone) {
 }
 
 /**
- * Gives 1 if the given zone is valid, 0 otherwise, valid implies that the zone is within the minefield
+ * Gives 1 if the given zone is valid, 0 otherwise, valid implies that the zone is within the minefield,
+ * and that the start of the zone is before the end of the zone
  * @param zone the zone to check
  * @param field the minefield to check the zone against
  * @return
  */
 int is_valid_zone(minefield field, zone zone) {
-    return zone.start.x >= 0 && zone.start.y >= 0 &&
-           zone.end.x < field.width && zone.end.y < field.height;
+    int zone_in_bounds = zone.start.x >= 0 && zone.start.y >= 0 &&
+                         zone.end.x < field.width && zone.end.y < field.height;
+
+    int start_before_end = zone.start.x <= zone.end.x && zone.start.y <= zone.end.y;
+
+    return zone_in_bounds && start_before_end;
 }
 
 /**
