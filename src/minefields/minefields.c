@@ -59,24 +59,24 @@ minefield get_random_minefield(int width, int height, int mine_amount) {
 }
 
 /**
- * Gives a minefield with randomly placed mines, but one half of the minefield has a higher probability of having mines
- * @param width the width of the empty minefield with mines in it
- * @param height the height of the empty minefield with mines in it
- * @param mine_amount the amount of mines in the minefields
- * @return the function returns a minefield with randomly placed mines and a half with a higher probability of having mines
+ * Gives a minefield with a gradiant of mines, where lower y values have a higher mine probability
+ * @param width the width of the minefield
+ * @param height the height of the minefield
+ * @param mine_amount the amount of mines in the minefield
+ * @return the function returns a minefield with a gradiant of mines
  */
-minefield get_random_minefield_with_lower_density_half(int width, int height, int mine_amount) {
+minefield get_gradiant_minefield(int width, int height, int mine_amount) {
     if (mine_amount > width * height) {
         printf("Error: mine_amount is greater than the amount of squares in the minefield");
         exit(EXIT_FAILURE);
     }
 
-    // Random amount mine amount, at most 50 % of the original mine amount, at least 0
-    int random_mine_amount = rand() % (mine_amount / 2 + 1);
-    minefield field = get_random_minefield(width, height, mine_amount - random_mine_amount);
+    // Create empty minefield
+    minefield field = get_empty_minefield(width, height);
 
-    // Place the rest of the mines in a random half of the minefield
-    for (int i = 0; i < random_mine_amount; ++i) {
+    // For loop generating random mines, finds a random y and x value,
+    // and calculates the probability of a mine being placed there based on the y value
+    for (int i = 0; i < mine_amount; ++i) {
         int random_y = rand() % height;
         int random_x = rand() % width;
 
@@ -85,30 +85,16 @@ minefield get_random_minefield_with_lower_density_half(int width, int height, in
             continue;
         }
 
-        field.matrix[random_y][random_x].mine = 1;
+        // Calculate probability of mine being placed
+        double probability = (double) random_y / height;
+        double random = (double) rand() / RAND_MAX;
+
+        if (random < probability) {
+            field.matrix[random_y][random_x].mine = 1;
+        } else {
+            i--;
+        }
     }
-
-    return field;
-}
-
-minefield get_random_minefield_with_lower_density_zone(int width, int height, int mine_amount) {
-    if (mine_amount > width * height) {
-        printf("Error: mine_amount is greater than the amount of squares in the minefield");
-        exit(EXIT_FAILURE);
-    }
-
-    // Random amount mine amount, at most 50 % of the original mine amount, at least 0
-    int random_mine_amount = rand() % (mine_amount / 2 + 1);
-    minefield field = get_random_minefield(width, height, mine_amount - random_mine_amount);
-
-    zone zone;
-    do {
-        zone.start.x = rand() % width;
-        zone.start.y = rand() % height;
-        zone.end.x = rand() % width;
-        zone.end.y = rand() % height;
-
-    } while (!is_valid_zone(field, zone));
 
     return field;
 }
