@@ -61,6 +61,7 @@ void test_get_empty_minefield() {
             assert(field.matrix[y][x].mine == 0);
         }
     }
+    free_minefield(field);
 }
 /**
  * Tests that the amount of mines in a random minefield is correct
@@ -85,6 +86,7 @@ void test_get_random_minefield() {
             }
         }
     }
+    free_minefield(field);
 
     /* Assert */
     assert(assert_counter == amount);
@@ -112,6 +114,7 @@ void test_get_zone_mine_sum() {
 
     /* Act */
     int result = get_zone_mine_sum(field, test_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(result == 3);  // Adjust the expected value based on your minefield matrix and zone
@@ -150,6 +153,7 @@ void test_get_minefield_sum() {
     minefield field = get_random_minefield(width, height, amount);
 
     mine_counter = get_minefield_sum(field);
+    free_minefield(field);
 
     /* Assert */
     assert(mine_counter == amount);
@@ -188,6 +192,7 @@ void test_get_biggest_cleared_zone() {
 
     test_zone_area = get_zone_area(test_zone);
     assert_zone_area = get_zone_area(assert_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
@@ -229,6 +234,7 @@ void test_get_biggest_clearable_zone() {
 
     test_zone_area = get_zone_area(test_zone);
     assert_zone_area = get_zone_area(assert_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
@@ -273,8 +279,7 @@ void test_binary_zoning_case_1() {
 
     test_zone_area = get_zone_area(test_zone);
     assert_zone_area = get_zone_area(assert_zone);
-
-
+    free_minefield(field);
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
@@ -316,6 +321,7 @@ void test_binary_zoning_case_2() {
 
     test_zone_area = get_zone_area(test_zone);
     assert_zone_area = get_zone_area(assert_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(assert_zone_area == test_zone_area);
@@ -336,6 +342,7 @@ void test_is_valid_zone_case_1() {
 
     /* Act */
     int result = is_valid_zone(field, test_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(result); // Zone is valid
@@ -351,6 +358,7 @@ void test_is_valid_zone_case_2() {
 
     /* Act */
     int result = is_valid_zone(field, test_zone);
+    free_minefield(field);
 
     /* Assert */
     assert(!result); // Zone is not valid
@@ -403,6 +411,7 @@ void test_get_zone_mine_density() {
     // In this case, there are 3 mines in a zone of size 3x3, so the expected density is 3/9 = 1/3
     double expected_density = 1.0 / 3.0;
     double diff = result - expected_density;
+    free_minefield(field);
 
     // Compare the actual and expected results with a small tolerance
     assert(-TOLERANCE < diff && diff < TOLERANCE);
