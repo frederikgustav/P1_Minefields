@@ -360,7 +360,6 @@ void test_is_valid_zone_case_2() {
  * Test of function that gets the height of a zone
  */
 void test_get_zone_height() {
-
     /* Arrange */
     zone test_zone = {{1, 2}, {3, 5}};
 
@@ -375,7 +374,6 @@ void test_get_zone_height() {
  * Test of function that gets the width of a zone
  */
 void test_get_zone_width() {
-
     /* Arrange */
     zone test_zone = {{1, 2}, {3, 5}};
 
