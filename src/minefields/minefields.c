@@ -59,47 +59,6 @@ minefield get_random_minefield(int width, int height, int mine_amount) {
 }
 
 /**
- * Gives a minefield with a gradiant of mines, where lower y values have a higher mine probability
- * @param width the width of the minefield
- * @param height the height of the minefield
- * @param mine_amount the amount of mines in the minefield
- * @return the function returns a minefield with a gradiant of mines
- */
-minefield get_gradiant_minefield(int width, int height, int mine_amount) {
-    if (mine_amount > width * height) {
-        printf("Error: mine_amount is greater than the amount of squares in the minefield");
-        exit(EXIT_FAILURE);
-    }
-
-    // Create empty minefield
-    minefield field = get_empty_minefield(width, height);
-
-    // For loop generating random mines, finds a random y and x value,
-    // and calculates the probability of a mine being placed there based on the y value
-    for (int i = 0; i < mine_amount; ++i) {
-        int random_y = rand() % height;
-        int random_x = rand() % width;
-
-        if (field.matrix[random_y][random_x].mine) {
-            i--;
-            continue;
-        }
-
-        // Calculate probability of mine being placed
-        double probability = (double) random_y / height;
-        double random = (double) rand() / RAND_MAX;
-
-        if (random < probability) {
-            field.matrix[random_y][random_x].mine = 1;
-        } else {
-            i--;
-        }
-    }
-
-    return field;
-}
-
-/**
  * Deallocates memory for a minefields matrix
  * @param field the minefield for which to deallocate memory
  */

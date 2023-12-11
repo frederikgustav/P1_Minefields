@@ -32,7 +32,6 @@ typedef struct zone {
 
 minefield get_empty_minefield(int width, int height);
 minefield get_random_minefield(int width, int height, int mine_count);
-minefield get_gradiant_minefield(int width, int height, int mine_amount);
 
 void print_minefield_zone(minefield field, zone zone);
 void print_minefield(minefield field);
