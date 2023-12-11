@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <math.h>
 #include <time.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -10,10 +9,10 @@
 struct stat st = {0};
 
 FILE* get_new_log_file(char* folder, int final);
-FILE* experiment_run(int width, int height, int mine_count, char* folder, int without_brute_force, int logging, int interval);
+FILE* experiment_run(int width, int height, int mine_count, char* folder, int with_brute_force, int with_gradiant_minefield, int logging, int interval);
 char* get_new_log_folder();
 
-void multiple_experiment_runs(int width, int height, int mine_count, int runs, int without_brute_force, int logging, int interval) {
+void multiple_experiment_runs(int width, int height, int mine_count, int runs, int with_brute_force, int with_gradiant_minefield, int logging, int interval) {
     char* folder = get_new_log_folder();
     FILE* run_files[runs];
 
@@ -22,7 +21,7 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     for (int i = 1; i <= runs; ++i) {
         if (logging) printf(" - Run %d/%d: \n", i, runs);
         int start_clocks = clock();
-        run_files[i-1] = experiment_run(width, height, mine_count, folder, without_brute_force, logging, interval);
+        run_files[i-1] = experiment_run(width, height, mine_count, folder, with_brute_force, with_gradiant_minefield, logging, interval);
         int time_elapsed = (clock() - start_clocks) / CLOCKS_PER_SEC;
         if (logging) printf(" - Completed in a total of %d seconds.\n", time_elapsed);
     }
@@ -109,11 +108,16 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     free(folder);
 }
 
-FILE* experiment_run(int width, int height, int mine_count, char* folder, int without_brute_force, int logging, int interval) {
+FILE* experiment_run(int width, int height, int mine_count, char* folder, int with_brute_force, int with_gradiant_minefield, int logging, int interval) {
     int mine_removal_capacity = mine_count-1;
     FILE *fp = get_new_log_file(folder, 0);
 
-    minefield field = get_random_minefield_with_lower_density_half(width, height, mine_count);
+    minefield field;
+    if (with_gradiant_minefield) {
+        field = get_gradiant_minefield(width, height, mine_count);
+    } else {
+        field = get_random_minefield(width, height, mine_count);
+    }
 
     int start_experiment_clocks = clock();
     for (int current_capacity = 1; current_capacity <= mine_removal_capacity; current_capacity = current_capacity + interval) {
@@ -121,7 +125,7 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
         if (logging) printf("    - Step %d: ", current_capacity);
         int start_clocks = clock();
         zone biggest_clearable_zone;
-        if (without_brute_force) {
+        if (!with_brute_force) {
             biggest_clearable_zone.end.x = 0;
             biggest_clearable_zone.end.y = 0;
             biggest_clearable_zone.start.x = 0;
@@ -154,7 +158,6 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
         new_area = get_zone_area(biggest_clearable_zone);
         elapsed_clocks = clock() - start_clocks;
 
-
         fprintf(fp, "%d,%d",
             new_area,
             elapsed_clocks
@@ -172,11 +175,6 @@ FILE* experiment_run(int width, int height, int mine_count, char* folder, int wi
     free_minefield(field);
 
     return fp;
-}
-
-double percent_error(double expected, double actual) {
-    double error_rate = 100-(((fabs(actual-expected))/expected)*100);
-    return error_rate;
 }
 
 char* get_new_log_folder() {
