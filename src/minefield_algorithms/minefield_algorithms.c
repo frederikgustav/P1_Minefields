@@ -11,8 +11,8 @@ zone get_biggest_cleared_zone(minefield field) {
     int max_zone = 0;
     int max_left = 0, max_right = 0, max_top = 0, max_bottom = 0;
     int matrix[field.height][field.width];
-// determines height of free cells stacked upon one another
-//Sets cells with mines to height of 0
+    // Determines height of free cells stacked upon one another
+    // Sets cells with mines to height of 0
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
             if (field.matrix[y][x].mine == 1) {
@@ -22,9 +22,9 @@ zone get_biggest_cleared_zone(minefield field) {
             }
         }
     }
-// checks for possible biggest rectangles zones, treating every cell as bottom right of a rectangle.
-//Goes for right to left (x to k) to find the width of rectangle.
-//Updates zone coordinates of zone
+    // Checks for possible biggest rectangles zones, treating every cell as bottom right of a rectangle.
+    // Goes for right to left (x to k) to find the width of rectangle.
+    // Updates zone coordinates of zone
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
             int minHeight = matrix[y][x];
@@ -41,7 +41,7 @@ zone get_biggest_cleared_zone(minefield field) {
             }
         }
     }
-// Returns biggest rectangle coordinates
+    // Returns biggest rectangle coordinates
     zone biggest_rect;
     biggest_rect.start.x = max_left;
     biggest_rect.start.y = max_top;
