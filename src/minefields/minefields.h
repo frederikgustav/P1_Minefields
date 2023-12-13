@@ -19,7 +19,7 @@ typedef struct square {
 typedef struct minefield {
     int width;
     int height;
-    struct square** matrix;
+    square** matrix;
 } minefield;
 
 /*
