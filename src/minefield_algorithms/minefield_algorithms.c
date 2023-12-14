@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include "minefield_algorithms.h"
 
@@ -233,15 +232,18 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
             if (get_zone_mine_sum(field, left) > mine_capacity) {
                 left_density = 2;
             }
-        } if (right_density != 2) {
+        }
+        if (right_density != 2) {
             if (get_zone_mine_sum(field, right) > mine_capacity) {
                 right_density = 2;
             }
-        } if (up_density != 2) {
+        }
+        if (up_density != 2) {
             if (get_zone_mine_sum(field, up) > mine_capacity) {
                 up_density = 2;
             }
-        } if (down_density != 2) {
+        }
+        if (down_density != 2) {
             if (get_zone_mine_sum(field, down) > mine_capacity) {
                 down_density = 2;
             }
