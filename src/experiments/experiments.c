@@ -42,7 +42,7 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     fprintf(final_file, "Remaining mines, Area, Seconds, Area, Seconds, Area, Seconds \n");
 
     // calculate averages and write them to final file
-    for (int current_capacity = 1; current_capacity <= mine_count-1; current_capacity = current_capacity + interval) {
+    for (int current_capacity = 1; current_capacity <= mine_count; current_capacity = current_capacity + interval) {
         double total_correct_area = 0;
         double total_correct_seconds = 0;
         double total_new_area = 0;
@@ -100,7 +100,8 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
     fprintf(final_file, "total_seconds_elapsed: %d,\n", end_experiment_time);
     fprintf(final_file, "start_mine_count: %d,\n", mine_count);
     fprintf(final_file, "minefield_size: %dx%d,\n", width, height);
-    fprintf(final_file, "minefield_cells: %d,\n", width*height);
+    // print number of runs
+    fprintf(final_file, "number_of_runs: %d,\n", runs);
 
     // print full path to folder
     if (logging) printf("Finished and saved results of experiment in folder: %s\n", folder);
@@ -109,7 +110,7 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
 }
 
 FILE* experiment_run(int width, int height, int mine_count, char* folder, int with_brute_force, int logging, int interval) {
-    int mine_removal_capacity = mine_count-1;
+    int mine_removal_capacity = mine_count;
     FILE *fp = get_new_log_file(folder, 0);
 
     minefield field = get_random_minefield(width, height, mine_count);
