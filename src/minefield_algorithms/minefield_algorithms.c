@@ -59,8 +59,9 @@ zone get_biggest_cleared_zone(minefield field) {
 zone get_biggest_clearable_zone(minefield field, int mine_removal_capacity) {
     // Initialize biggest_clearable_zone to the biggest cleared zone without removing any mines
     zone biggest_clearable_zone = get_biggest_cleared_zone(field);
+    int biggest_clearable_zone_area = get_zone_area(biggest_clearable_zone);
     int final_mine_count = get_minefield_sum(field) - mine_removal_capacity;
-    check_minefield_permutations(field, &biggest_clearable_zone, 0, final_mine_count);
+    check_minefield_permutations(field, &biggest_clearable_zone, &biggest_clearable_zone_area, 0, final_mine_count);
 
     return biggest_clearable_zone;
 }
@@ -73,7 +74,7 @@ zone get_biggest_clearable_zone(minefield field, int mine_removal_capacity) {
  * @param final_mine_count the amount of mines in each valid permutation
  * @return the amount of valid permutations
  */
-int check_minefield_permutations(minefield field, zone* best_zone, int index, int final_mine_count) {
+int check_minefield_permutations(minefield field, zone* best_zone, int* best_area, int index, int final_mine_count) {
     int result = 0;
     int x = index % field.width;
     int y = index / field.width;
@@ -82,11 +83,11 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
         // If the current permutation is valid, check if it is better than the current best zone
         if (get_minefield_sum(field) == final_mine_count) {
             zone biggest_cleared_zone = get_biggest_cleared_zone(field);
-            int best_clearable_zone_area = get_zone_area(*best_zone);
             int current_zone_area = get_zone_area(biggest_cleared_zone);
 
-            if (current_zone_area > best_clearable_zone_area) {
+            if (current_zone_area > *best_area) {
                 *best_zone = biggest_cleared_zone;
+                *best_area = current_zone_area;
             }
 
             return 1;
@@ -96,16 +97,16 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
     } else if (field.matrix[y][x].mine != 1) {
         // If the current position is not a mine, continue to next index
         index++;
-        return check_minefield_permutations(field, best_zone, index, final_mine_count);
+        return check_minefield_permutations(field, best_zone, best_area, index, final_mine_count);
     } else if (!minefield_permutation_possibly_valid(field, final_mine_count, x, y)) {
         // If the current permutation cant be valid, stop searching in this branch
         return 0;
     } else {
         // The current position is a mine, continue to next index with and without the mine
         index++;
-        result += check_minefield_permutations(field, best_zone, index, final_mine_count);
+        result += check_minefield_permutations(field, best_zone, best_area, index, final_mine_count);
         field.matrix[y][x].mine = 0;
-        result += check_minefield_permutations(field, best_zone, index, final_mine_count);
+        result += check_minefield_permutations(field, best_zone, best_area, index, final_mine_count);
         field.matrix[y][x].mine = 1; // change back to original value
 
         return result;
