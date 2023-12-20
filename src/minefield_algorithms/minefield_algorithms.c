@@ -153,10 +153,7 @@ int minefield_permutation_possibly_valid(minefield field, int final_mine_count, 
     int not_too_few_mines = (remaining_mines + mine_count) >= final_mine_count;
 
     // Return 1 if both conditions are met, else return 0, meaning the permutation is not possibly valid
-    //return not_too_many_mines && not_too_few_mines;
-    //return 1;
-    //return not_too_few_mines;
-    return not_too_many_mines;
+    return not_too_many_mines && not_too_few_mines;
 }
 
 /**
