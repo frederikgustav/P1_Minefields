@@ -1,3 +1,6 @@
+// minefield_algorithms.c
+// Contains functions for finding the biggest clearable zone in a minefield
+
 #include <stdlib.h>
 #include "minefield_algorithms.h"
 
@@ -56,12 +59,13 @@ zone get_biggest_cleared_zone(minefield field) {
  * @param mine_removal_capacity the amount of mines that can be cleared
  * @return biggest clearable zone
  */
-zone get_biggest_clearable_zone(minefield field, int mine_removal_capacity) {
-    // Initialize biggest_clearable_zone to the biggest cleared zone without removing any mines
-    zone biggest_clearable_zone = get_biggest_cleared_zone(field);
-    int biggest_clearable_zone_area = get_zone_area(biggest_clearable_zone);
-    int final_mine_count = get_minefield_sum(field) - mine_removal_capacity;
-    check_minefield_permutations(field, &biggest_clearable_zone, &biggest_clearable_zone_area, 0, final_mine_count);
+zone get_biggest_clearable_zone(minefield field,int removal_capacity){
+    zone biggest_clearable_zone = {{0, 0}, {0, 0}};
+    int biggest_clearable_zone_area = 1;
+    int mine_sum = get_minefield_sum(field);
+    int final_mine_count = mine_sum - removal_capacity;
+    check_minefield_permutations(field, &biggest_clearable_zone,
+      &biggest_clearable_zone_area, 0, final_mine_count);
 
     return biggest_clearable_zone;
 }
@@ -89,7 +93,6 @@ int check_minefield_permutations(minefield field, zone* best_zone, int* best_are
                 *best_zone = biggest_cleared_zone;
                 *best_area = current_zone_area;
             }
-
             return 1;
         } else {
             return 0;
@@ -150,7 +153,10 @@ int minefield_permutation_possibly_valid(minefield field, int final_mine_count, 
     int not_too_few_mines = (remaining_mines + mine_count) >= final_mine_count;
 
     // Return 1 if both conditions are met, else return 0, meaning the permutation is not possibly valid
-    return not_too_many_mines && not_too_few_mines;
+    //return not_too_many_mines && not_too_few_mines;
+    //return 1;
+    //return not_too_few_mines;
+    return not_too_many_mines;
 }
 
 /**

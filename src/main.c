@@ -1,3 +1,6 @@
+// main.c
+// Entrypoint for program, used for running experiments
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>

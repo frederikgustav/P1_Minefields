@@ -1,3 +1,7 @@
+// experiments.c
+// Implements functions for running experiments
+// Beware! The file handling parts of this code are not original.
+
 #include <stdio.h>
 #include <time.h>
 #include <sys/stat.h>
