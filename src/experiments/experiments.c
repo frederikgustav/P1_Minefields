@@ -82,7 +82,7 @@ void multiple_experiment_runs(int width, int height, int mine_count, int runs, i
         double avg_new_area = total_new_area / runs;
         double avg_new_seconds = (((double) total_new_seconds / runs) / CLOCKS_PER_SEC);
         double avg_new_area2 = total_new_area2 / runs;
-        double avg_new_seconds2 = (((double) total_new_seconds / runs) / CLOCKS_PER_SEC);
+        double avg_new_seconds2 = (((double) total_new_seconds2 / runs) / CLOCKS_PER_SEC);
 
         // print averages to final file
         fprintf(final_file, "%d, %f,%f, %f,%f, %f,%f\n",

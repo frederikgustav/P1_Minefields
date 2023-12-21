@@ -23,9 +23,9 @@ int main(void) {
     scanf("%d", &runs);
     printf("Enter logging (0 or 1):\n");
     scanf("%d", &logging);
-    printf("Enter mine removal capacity interval:\n");
+    printf("Enter mine removal capacity interval, (Usually 1):\n");
     scanf("%d", &interval);
-    printf("Enter with_brute_force (0 or 1):\n");
+    printf("Enter with_brute_force (0 or 1), (Usually 1):\n");
     scanf("%d", &with_brute_force);
 
     multiple_experiment_runs(width, height, mine_count, runs, with_brute_force, logging, interval);
