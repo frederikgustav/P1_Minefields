@@ -71,9 +71,9 @@ void free_minefield(minefield field) {
 
 /**
  * Prints a minefield, example:
- * | O O X |
- * | X O 0 |
- * | O O X |
+ * | 0 0 X |
+ * | X 0 0 |
+ * | 0 0 X |
  * @param field this parameter is used to access information about the minefield and print its contents
  */
 void print_minefield(minefield field) {
@@ -95,9 +95,9 @@ void print_minefield(minefield field) {
 
 /**
  * Prints a minefield zone, example:
- * | O O X |
+ * | 0 0 X |
  * | X - - |
- * | O - - |
+ * | 0 - - |
  * @param field the minefield to print
  * @param zone the zone to print
  */
