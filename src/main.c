@@ -60,6 +60,7 @@ void run_permutation_generation_demo() {
     best_zone = get_biggest_clearable_zone(field, 2);
     printf("Best zone: \n");
     print_minefield_zone(field, best_zone);
+    Sleep(100000);
 }
 
 void run_random_point_expansion_demo() {
@@ -68,6 +69,7 @@ void run_random_point_expansion_demo() {
     printf("When starting from random point and removing 50 mines:\n");
     zone zone;
     zone = random_point_expansion(field, 50);
+    Sleep(100000);
 }
 
 void run_binary_zoning_demo() {
@@ -75,4 +77,5 @@ void run_binary_zoning_demo() {
 
     zone zone;
     zone = binary_zoning(field, 10);
+    Sleep(100000);
 }
