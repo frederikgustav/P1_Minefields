@@ -82,7 +82,7 @@ void print_minefield(minefield field) {
 
         for (int x = 0; x < field.width; ++x) {
             if (field.matrix[y][x].mine == 0) {
-                printf("0  ");
+                printf("   ");
             } else {
                 printf("X  ");
             }
@@ -110,7 +110,7 @@ void print_minefield_zone(minefield field, zone zone) {
                 x >= zone.start.x && x <= zone.end.x) {
                 printf("-  ");
             } else if (field.matrix[y][x].mine == 0) {
-                printf("0  ");
+                printf("   ");
             } else {
                 printf("X  ");
             }

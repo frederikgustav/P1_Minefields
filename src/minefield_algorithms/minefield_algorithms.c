@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include "minefield_algorithms.h"
+#include <windows.h>
 
 /**
  * Returns biggest cleared rectangle in a minefield
@@ -88,6 +90,10 @@ int check_minefield_permutations(minefield field, zone* best_zone, int index, in
             if (current_zone_area > best_clearable_zone_area) {
                 *best_zone = biggest_cleared_zone;
             }
+            if (PERMUTATION_LOGGING) {
+                printf("Found permutation with %d mines and area %d\n", final_mine_count, current_zone_area);
+                print_minefield_zone(field, biggest_cleared_zone);
+            }
 
             return 1;
         } else {
@@ -168,7 +174,6 @@ zone quick_clear(minefield field, int mine_capacity) {
  * Divides the minefield into 2 zones until the mine capacity is reached
  * @param field the minefield
  * @param mine_capacity the amount of mines that can be cleared
- * @param current_zone the zone to start with
  * @return the best approximate zone
  */
 zone binary_zoning(minefield field, int mine_capacity) {
@@ -201,6 +206,11 @@ zone binary_zoning(minefield field, int mine_capacity) {
             current_zone = zone_1;
         } else {
             current_zone = zone_2;
+        }
+        if (BINARY_ZONING_LOGGING) {
+            system("cls");
+            print_minefield_zone(field, current_zone);
+            Sleep(1500);
         }
     }
     return current_zone;
@@ -249,6 +259,12 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
             }
         }
 
+        if (RANDOM_POINT_LOGGING) {
+            system("cls");
+            print_minefield_zone(field, current_zone);
+            Sleep(200);
+        }
+
         // find the zone with lowest mine density that is not 2 (a zone with density 2 is invalid)
         if (left_density != 2 && left_density <= right_density && left_density <= up_density && left_density <= down_density) {
             current_zone = left;
@@ -262,6 +278,7 @@ zone expansion_zoning(minefield field, int mine_capacity, zone current_zone) {
             break;
         }
     }
+
     return current_zone;
 }
 

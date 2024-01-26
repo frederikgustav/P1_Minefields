@@ -1,3 +1,8 @@
+// Logging vars
+#define PERMUTATION_LOGGING 1
+#define RANDOM_POINT_LOGGING 1
+#define BINARY_ZONING_LOGGING 1
+
 /*
  * Represents a point in a known minefield.
  */
