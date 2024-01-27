@@ -8,6 +8,7 @@
 void run_permutation_generation_demo();
 void run_random_point_expansion_demo();
 void run_binary_zoning_demo();
+void run_quick_clear_demo();
 
 int main(void) {
     // set random seed
@@ -15,13 +16,12 @@ int main(void) {
 
     printf("Which demo would you like to run?\n");
     printf("1. Permutation generation\n");
-    printf("2. Center expansion\n");
+    printf("2. Random point expansion\n");
     printf("3. Binary zoning\n");
-    printf("4. \n");
-    printf("5. \n");
+    printf("4. Quick Clear\n");
 
     int choice = 0;
-    while (choice < 1 || choice > 5) {
+    while (choice < 1 || choice > 4) {
         printf("Enter your choice: ");
         scanf("%d", &choice);
     }
@@ -37,16 +37,12 @@ int main(void) {
             run_binary_zoning_demo();
             break;
         case 4:
-            //run_demo_4();
-            break;
-        case 5:
-            //run_demo_5();
+            run_quick_clear_demo();
             break;
         default:
             printf("Invalid choice\n");
             exit(EXIT_FAILURE);
     }
-
 
     return EXIT_SUCCESS;
 }
@@ -77,5 +73,13 @@ void run_binary_zoning_demo() {
 
     zone zone;
     zone = binary_zoning(field, 10);
+    Sleep(100000);
+}
+
+void run_quick_clear_demo() {
+    minefield field = get_random_minefield(30, 30, 300);
+
+    zone zone;
+    zone = quick_clear(field, 20);
     Sleep(100000);
 }
