@@ -65,7 +65,7 @@ void run_random_point_expansion_demo() {
     printf("When starting from random point and removing 50 mines:\n");
     zone zone;
     zone = random_point_expansion(field, 50);
-    Sleep(100000);
+    Sleep(1000000);
 }
 
 void run_binary_zoning_demo() {
@@ -73,7 +73,7 @@ void run_binary_zoning_demo() {
 
     zone zone;
     zone = binary_zoning(field, 10);
-    Sleep(100000);
+    Sleep(1000000);
 }
 
 void run_quick_clear_demo() {
@@ -81,5 +81,5 @@ void run_quick_clear_demo() {
 
     zone zone;
     zone = quick_clear(field, 20);
-    Sleep(100000);
+    Sleep(1000000);
 }
