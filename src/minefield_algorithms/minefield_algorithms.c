@@ -23,15 +23,35 @@ zone get_biggest_cleared_zone(minefield field) {
             }
         }
     }
+    if (BIGGEST_ZONE_LOGGING) {
+        printf("Height matrix:\n");
+        for (int y = 0; y < field.height; ++y) {
+            printf("|");
+            for (int x = 0; x < field.width; ++x) {
+                printf(" %d ", matrix[y][x]);
+            }
+            printf("|\n");
+        }
+        printf("\n");
+    }
     // Checks for possible biggest rectangles zones, treating every cell as bottom right of a rectangle.
     // Goes for right to left (x to k) to find the width of rectangle.
     // Updates zone coordinates of zone
     for (int y = 0; y < field.height; ++y) {
         for (int x = 0; x < field.width; ++x) {
             int minHeight = matrix[y][x];
+            if (BIGGEST_ZONE_LOGGING) printf("Coordinates: %d, %d and minHeight: %d\n", x, y, minHeight);
             for (int k = x; k >= 0; --k) {
+                if (BIGGEST_ZONE_LOGGING) printf("Found 1 cell (");
+                //if (BIGGEST_ZONE_LOGGING && k==x) printf("NEXT\n");
                 minHeight = minHeight < matrix[y][k] ? minHeight : matrix[y][k];
                 int zone = minHeight * (x - k + 1);
+                if (BIGGEST_ZONE_LOGGING) printf("minHeight: %d and zone: %d)\n", minHeight, zone);
+
+                //if (BIGGEST_ZONE_LOGGING) printf("k: %d,\n", k);
+                //if (BIGGEST_ZONE_LOGGING) printf("for coordinates: (%d, %d)\n", x, y);
+                //if (BIGGEST_ZONE_LOGGING) printf("checked zone: %d\n\n", zone);
+
                 if (zone > max_zone) {
                     max_zone = zone;
                     max_left = k;

@@ -83,3 +83,25 @@ void run_quick_clear_demo() {
     zone = quick_clear(field, 20);
     Sleep(1000000);
 }
+
+// for understanding the get_biggest_cleared_zone (set BIGGEST_ZONE_LOGGING to 1 in src/minefields/minefields.h)
+//#include <stdlib.h>
+//#include <stdio.h>
+//#include <time.h>
+//#include "experiments/experiments.h"
+//#include "minefield_algorithms/minefield_algorithms.h"
+//
+//int main(void) {
+//    // set random seed
+//    srand(time(NULL));
+//
+//    minefield field = get_empty_minefield(3,3);
+//    field.matrix[1][0].mine = 1;
+//    field.matrix[0][2].mine = 1;
+//    field.matrix[1][2].mine = 1;
+//    print_minefield(field);
+//    zone zone = get_biggest_cleared_zone(field);
+//    print_minefield_zone(field, zone);
+//
+//    return EXIT_SUCCESS;
+//}

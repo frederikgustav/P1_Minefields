@@ -2,6 +2,7 @@
 #define PERMUTATION_LOGGING 1
 #define RANDOM_POINT_LOGGING 1
 #define BINARY_ZONING_LOGGING 1
+#define BIGGEST_ZONE_LOGGING 0
 
 /*
  * Represents a point in a known minefield.
